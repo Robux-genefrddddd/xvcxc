@@ -333,6 +333,15 @@ export default function Dashboard() {
     }
   };
 
+  // Apply theme to document root
+  useEffect(() => {
+    const colors = getThemeColors(theme);
+    document.documentElement.style.backgroundColor = colors.background;
+    document.documentElement.style.color = colors.text;
+    document.body.style.backgroundColor = colors.background;
+    document.body.style.color = colors.text;
+  }, [theme]);
+
   if (isAuthLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -345,14 +354,6 @@ export default function Dashboard() {
   }
 
   const themeColors = getThemeColors(theme);
-
-  // Apply theme to document root
-  useEffect(() => {
-    document.documentElement.style.backgroundColor = themeColors.background;
-    document.documentElement.style.color = themeColors.text;
-    document.body.style.backgroundColor = themeColors.background;
-    document.body.style.color = themeColors.text;
-  }, [theme, themeColors]);
 
   return (
     <div
