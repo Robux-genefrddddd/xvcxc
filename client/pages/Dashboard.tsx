@@ -45,6 +45,7 @@ interface FileItem {
   uploadedAt: string;
   shared: boolean;
   shareUrl?: string;
+  storagePath?: string;
 }
 
 interface User {
