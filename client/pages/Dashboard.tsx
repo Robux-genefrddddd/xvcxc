@@ -140,6 +140,29 @@ export default function Dashboard() {
         storagePath: doc.data().storagePath,
       }));
       setFiles(fileList);
+
+      // Calculate storage used
+      let totalSize = 0;
+      fileList.forEach((file) => {
+        const sizeStr = file.size;
+        if (sizeStr.includes("MB")) {
+          totalSize += parseFloat(sizeStr) * 1024 * 1024;
+        } else if (sizeStr.includes("KB")) {
+          totalSize += parseFloat(sizeStr) * 1024;
+        }
+      });
+
+      // Update user plan storage used
+      if (userId) {
+        const userPlanRef = doc(db, "userPlans", userId);
+        const userPlanDoc = await getDoc(userPlanRef);
+        if (userPlanDoc.exists()) {
+          setUserPlan({
+            ...userPlan,
+            storageUsed: totalSize,
+          });
+        }
+      }
     } catch (error) {
       console.error("Error loading files:", error);
     } finally {
