@@ -255,6 +255,16 @@ export default function Dashboard() {
     localStorage.setItem("app-theme", newTheme);
   };
 
+  const handleCloseUploadModal = () => {
+    if (uploadStage !== "uploading" && uploadStage !== "validating" && uploadStage !== "processing") {
+      setUploadModalOpen(false);
+      setUploadProgress(0);
+      setUploadStage("validating");
+      setUploadFileName("");
+      setUploadError(null);
+    }
+  };
+
   return (
     <div
       className="min-h-screen flex"
