@@ -159,12 +159,21 @@ export default function Dashboard() {
         }
       });
 
-      // Update user plan storage used
+      // Update user plan storage used and persist to Firestore
       if (userId) {
-        setUserPlan((prevPlan) => ({
-          ...prevPlan,
+        const updatedPlan = {
+          ...userPlan,
           storageUsed: totalSize,
-        }));
+        };
+        setUserPlan(updatedPlan);
+
+        // Persist storage to Firestore so it doesn't reset on reload
+        try {
+          const planRef = doc(db, "userPlans", userId);
+          await updateDoc(planRef, { storageUsed: totalSize });
+        } catch (error) {
+          console.error("Error updating storage in Firestore:", error);
+        }
       }
     } catch (error) {
       console.error("Error loading files:", error);
