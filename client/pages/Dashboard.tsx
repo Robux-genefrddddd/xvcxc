@@ -95,18 +95,56 @@ export default function Dashboard() {
   const handleFileUpload = async (file: File) => {
     if (!file || !auth.currentUser) return;
 
+    // Reset upload state
+    setUploadFileName(file.name);
+    setUploadProgress(0);
+    setUploadStage("validating");
+    setUploadError(null);
+    setUploadModalOpen(true);
     setUploading(true);
+
     try {
+      // Stage 1: Validate file
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Check file size (100MB limit)
+      if (file.size > MAX_FILE_SIZE) {
+        setUploadError(`File size exceeds 100MB limit. Your file is ${(file.size / (1024 * 1024)).toFixed(2)}MB`);
+        setUploadStage("error");
+        setUploading(false);
+        return;
+      }
+
+      setUploadProgress(20);
+
+      // Stage 2: Upload to storage
+      setUploadStage("uploading");
       const fileRef = ref(
         storage,
         `files/${auth.currentUser.uid}/${Date.now()}_${file.name}`,
       );
+
+      // Simulate upload progress
+      let lastProgress = 20;
+      const progressInterval = setInterval(() => {
+        if (lastProgress < 80) {
+          lastProgress += Math.random() * 30;
+          setUploadProgress(Math.min(lastProgress, 80));
+        }
+      }, 500);
+
       await uploadBytes(fileRef, file);
+      clearInterval(progressInterval);
+      setUploadProgress(85);
 
       const fileSize =
         file.size > 1024 * 1024
           ? `${(file.size / (1024 * 1024)).toFixed(2)}MB`
           : `${(file.size / 1024).toFixed(2)}KB`;
+
+      // Stage 3: Process file
+      setUploadStage("processing");
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
       await addDoc(collection(db, "files"), {
         userId: auth.currentUser.uid,
@@ -117,10 +155,16 @@ export default function Dashboard() {
         storagePath: fileRef.fullPath,
       });
 
+      // Complete
+      setUploadProgress(100);
+      setUploadStage("complete");
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       loadFiles();
     } catch (error) {
       console.error("Error uploading file:", error);
-      alert("Upload failed");
+      setUploadError("Upload failed. Please try again.");
+      setUploadStage("error");
     } finally {
       setUploading(false);
     }
