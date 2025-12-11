@@ -11,6 +11,8 @@ import {
   FolderOpen,
   Zap,
   HardDrive,
+  Download,
+  Crown,
 } from "lucide-react";
 import { auth, db, storage } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
