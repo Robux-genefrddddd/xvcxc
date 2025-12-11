@@ -78,16 +78,6 @@ export function MaintenanceScreen() {
       `}</style>
 
       <div className="text-center max-w-2xl">
-        <div className="flex justify-center mb-8">
-          <div
-            className="w-1 h-16 rounded-full"
-            style={{
-              backgroundColor: "#EF4444",
-              animation: "slideDown 0.8s ease-out",
-            }}
-          />
-        </div>
-
         <h1
           className="text-5xl font-bold mb-6"
           style={{
@@ -99,7 +89,7 @@ export function MaintenanceScreen() {
         </h1>
 
         <p
-          className="text-xl mb-2"
+          className="text-xl"
           style={{
             color: colors.textSecondary,
             animation: "slideUp 0.8s ease-out 0.2s both",
@@ -108,25 +98,6 @@ export function MaintenanceScreen() {
         >
           {maintenanceMessage}
         </p>
-
-        {isAdmin && (
-          <p
-            className="text-xs mt-8"
-            style={{
-              color: colors.textSecondary,
-              animation: "slideUp 0.8s ease-out 0.3s both",
-            }}
-          >
-            Press <kbd style={{
-              backgroundColor: "rgba(96, 165, 250, 0.2)",
-              padding: "4px 8px",
-              borderRadius: "4px",
-              fontFamily: "monospace",
-              color: colors.accent,
-              fontWeight: "600"
-            }}>F12</kbd> to access admin
-          </p>
-        )}
       </div>
 
       <style>{`
