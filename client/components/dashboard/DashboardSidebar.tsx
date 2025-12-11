@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { Files, Users, Palette, LogOut } from "lucide-react";
+import { Files, Users, Palette, LogOut, Shield } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getThemeColors } from "@/lib/theme-colors";
+import { UserRole, canAccessAdmin } from "@/lib/auth-utils";
 
 interface UserPlan {
   type: "free" | "premium";
@@ -18,13 +19,22 @@ interface DashboardSidebarProps {
   theme: string;
   userPlan?: UserPlan;
   onUpgradeClick?: () => void;
+  userRole?: UserRole;
 }
 
-const navItems = [
-  { id: "files", label: "Files", icon: Files },
-  { id: "users", label: "Manage Users", icon: Users },
-  { id: "theme", label: "Theme", icon: Palette },
-];
+const getNavItems = (userRole?: UserRole) => {
+  const items = [
+    { id: "files", label: "Files", icon: Files },
+    { id: "users", label: "Manage Users", icon: Users },
+    { id: "theme", label: "Theme", icon: Palette },
+  ];
+
+  if (userRole && canAccessAdmin(userRole)) {
+    items.push({ id: "admin", label: "Admin Panel", icon: Shield });
+  }
+
+  return items;
+};
 
 export function DashboardSidebar({
   activeTab,
