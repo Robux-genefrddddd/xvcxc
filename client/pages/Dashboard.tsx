@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FileUpload } from "@/components/dashboard/FileUpload";
 import { FilesList } from "@/components/dashboard/FilesList";
 import { UserManagement } from "@/components/dashboard/UserManagement";
 import { ThemeSelector } from "@/components/dashboard/ThemeSelector";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { UploadModal, MAX_FILE_SIZE } from "@/components/dashboard/UploadModal";
+import { PlanUpgradeModal } from "@/components/dashboard/PlanUpgradeModal";
 import { auth, db, storage } from "@/lib/firebase";
 import { getThemeColors, getThemeBackgroundImage } from "@/lib/theme-colors";
 import {
@@ -16,8 +18,10 @@ import {
   updateDoc,
   query,
   where,
+  getDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, deleteObject } from "firebase/storage";
+import { onAuthStateChanged } from "firebase/auth";
 
 interface FileItem {
   id: string;
