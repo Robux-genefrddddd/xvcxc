@@ -44,6 +44,7 @@ export function DashboardSidebar({
   theme,
   userPlan,
   onUpgradeClick,
+  userRole,
 }: DashboardSidebarProps) {
   const colors = getThemeColors(theme);
   const storageLimitMB = userPlan ? userPlan.storageLimit / (1024 * 1024) : 100;
@@ -60,6 +61,8 @@ export function DashboardSidebar({
       console.error("Logout error:", error);
     }
   };
+
+  const navItems = getNavItems(userRole);
 
   return (
     <aside
