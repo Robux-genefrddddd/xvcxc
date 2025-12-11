@@ -384,6 +384,8 @@ export default function Dashboard() {
         userName={userName}
         userEmail={userEmail}
         theme={theme}
+        userPlan={userPlan}
+        onUpgradeClick={() => setPlanUpgradeModalOpen(true)}
       />
 
       {/* Main Content */}
