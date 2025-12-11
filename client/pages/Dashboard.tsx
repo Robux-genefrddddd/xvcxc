@@ -40,10 +40,19 @@ interface User {
   role: "admin" | "user";
 }
 
+interface UserPlan {
+  type: "free" | "premium";
+  storageLimit: number;
+  storageUsed: number;
+  validatedAt?: string;
+}
+
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("files");
   const [userName, setUserName] = useState("User");
   const [userEmail, setUserEmail] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -56,17 +65,59 @@ export default function Dashboard() {
   >("validating");
   const [uploadFileName, setUploadFileName] = useState("");
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [planUpgradeModalOpen, setPlanUpgradeModalOpen] = useState(false);
+  const [userPlan, setUserPlan] = useState<UserPlan>({
+    type: "free",
+    storageLimit: 100 * 1024 * 1024,
+    storageUsed: 0,
+  });
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
-    if (auth.currentUser) {
-      setUserName(auth.currentUser.displayName || "User");
-      setUserEmail(auth.currentUser.email || "");
-    }
-    const savedTheme = localStorage.getItem("app-theme") || "dark";
-    setTheme(savedTheme);
-    loadFiles();
-    loadUsers();
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUserId(user.uid);
+        setUserName(user.displayName || "User");
+        setUserEmail(user.email || "");
+
+        // Load user plan
+        try {
+          const planDoc = await getDoc(doc(db, "userPlans", user.uid));
+          if (planDoc.exists()) {
+            setUserPlan(planDoc.data() as UserPlan);
+          } else {
+            // Initialize free plan for new users
+            const initialPlan: UserPlan = {
+              type: "free",
+              storageLimit: 100 * 1024 * 1024,
+              storageUsed: 0,
+            };
+            await updateDoc(doc(db, "userPlans", user.uid), initialPlan).catch(
+              async () => {
+                await addDoc(collection(db, "userPlans"), {
+                  userId: user.uid,
+                  ...initialPlan,
+                });
+              }
+            );
+            setUserPlan(initialPlan);
+          }
+        } catch (error) {
+          console.error("Error loading user plan:", error);
+        }
+
+        const savedTheme = localStorage.getItem("app-theme") || "dark";
+        setTheme(savedTheme);
+        loadFiles();
+        loadUsers();
+      } else {
+        navigate("/login");
+      }
+      setIsAuthLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   // ============= FILES MANAGEMENT =============
   const loadFiles = async () => {
