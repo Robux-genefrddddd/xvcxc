@@ -557,14 +557,6 @@ export default function Dashboard() {
         userId={userId || ""}
         onUpgradePlan={(plan) => setUserPlan(plan)}
       />
-
-      {/* Maintenance Mode Modal */}
-      <MaintenanceModeModal
-        isOpen={maintenanceModalOpen}
-        message={maintenanceMessage}
-        theme={theme}
-        onClose={() => setMaintenanceModalOpen(false)}
-      />
     </div>
   );
 }
