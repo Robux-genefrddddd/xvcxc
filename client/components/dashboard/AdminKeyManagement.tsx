@@ -21,44 +21,65 @@ interface PremiumKey extends PremiumKeyData {
 interface AdminKeyManagementProps {
   theme: string;
   userRole: UserRole;
+  userId: string;
+}
+
+interface KeyForm {
+  type: "monthly" | "yearly" | "lifetime";
+  maxEmojis: number;
 }
 
 export function AdminKeyManagement({
   theme,
   userRole,
+  userId,
 }: AdminKeyManagementProps) {
   const colors = getThemeColors(theme);
   const [keys, setKeys] = useState<PremiumKey[]>([]);
   const [loading, setLoading] = useState(false);
   const [generatingKey, setGeneratingKey] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [showGenerateForm, setShowGenerateForm] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [formData, setFormData] = useState<KeyForm>({
+    type: "monthly",
+    maxEmojis: 1000,
+  });
 
   useEffect(() => {
-    loadKeys();
-  }, []);
+    if (!canCreateKeys(userRole)) return;
 
-  const loadKeys = async () => {
-    setLoading(true);
-    try {
-      const docsSnapshot = await getDocs(collection(db, "premiumKeys"));
-      const keyList: PremiumKey[] = docsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        key: doc.data().key,
-        status: doc.data().status || "unused",
-        assignedTo: doc.data().assignedTo,
-        assignedEmail: doc.data().assignedEmail,
-        createdAt: new Date(doc.data().createdAt).toLocaleDateString(),
-        usedAt: doc.data().usedAt
-          ? new Date(doc.data().usedAt).toLocaleDateString()
-          : undefined,
-      }));
-      setKeys(keyList);
-    } catch (error) {
-      console.error("Error loading keys:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const unsubscribe = onSnapshot(
+      collection(db, "premiumKeys"),
+      (snapshot) => {
+        const keyList: PremiumKey[] = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            key: data.key,
+            status: data.status || "unused",
+            type: data.type || "monthly",
+            maxEmojis: data.maxEmojis || 1000,
+            assignedTo: data.assignedTo,
+            assignedEmail: data.assignedEmail,
+            isActive: data.isActive !== false,
+            createdAt: data.createdAt,
+            usedAt: data.usedAt,
+            expiresAt: data.expiresAt,
+            createdBy: data.createdBy,
+          };
+        });
+        setKeys(keyList);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error loading keys:", error);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [userRole]);
 
   const generateKey = async () => {
     if (!canCreateKeys(userRole)) {
@@ -69,12 +90,31 @@ export function AdminKeyManagement({
     setGeneratingKey(true);
     try {
       const newKey = `KEY_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+      const now = new Date();
+      let expiresAt: string | undefined;
+
+      if (formData.type === "monthly") {
+        const expires = new Date(now);
+        expires.setMonth(expires.getMonth() + 1);
+        expiresAt = expires.toISOString();
+      } else if (formData.type === "yearly") {
+        const expires = new Date(now);
+        expires.setFullYear(expires.getFullYear() + 1);
+        expiresAt = expires.toISOString();
+      }
+
       await addDoc(collection(db, "premiumKeys"), {
         key: newKey,
         status: "unused",
-        createdAt: new Date().toISOString(),
-      });
-      loadKeys();
+        type: formData.type,
+        maxEmojis: formData.maxEmojis,
+        isActive: true,
+        createdAt: now.toISOString(),
+        createdBy: userId,
+      } as PremiumKeyData);
+
+      setShowGenerateForm(false);
+      setFormData({ type: "monthly", maxEmojis: 1000 });
     } catch (error) {
       console.error("Error generating key:", error);
       alert("Failed to generate key");
@@ -83,13 +123,13 @@ export function AdminKeyManagement({
     }
   };
 
-  const deleteKey = async (keyId: string) => {
-    if (!confirm("Are you sure? This action cannot be undone.")) return;
+  const deleteKey = async (keyId: string, key: PremiumKey) => {
     try {
       await deleteDoc(doc(db, "premiumKeys", keyId));
-      loadKeys();
+      setDeleteConfirm(null);
     } catch (error) {
       console.error("Error deleting key:", error);
+      alert("Failed to delete key");
     }
   };
 
