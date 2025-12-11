@@ -82,11 +82,53 @@ export default function ActivatePlanModal({
   const colors = themeColors[theme as keyof typeof themeColors] || themeColors.dark;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 perspective">
+      <style>{`
+        .perspective {
+          perspective: 1000px;
+        }
+
+        @keyframes float3d {
+          0%, 100% {
+            transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+          }
+          25% {
+            transform: translateY(-5px) rotateX(1deg) rotateY(-1deg);
+          }
+          50% {
+            transform: translateY(-10px) rotateX(0deg) rotateY(0deg);
+          }
+          75% {
+            transform: translateY(-5px) rotateX(-1deg) rotateY(1deg);
+          }
+        }
+
+        .modal-3d {
+          animation: float3d 6s ease-in-out infinite;
+        }
+
+        .modal-glow {
+          box-shadow: 0 0 30px rgba(96, 165, 250, 0.3), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-ornament {
+          position: absolute;
+          bottom: -20px;
+          left: -20px;
+          width: 100px;
+          height: 100px;
+          background: linear-gradient(135deg, rgba(96, 165, 250, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+          border-radius: 50%;
+          filter: blur(20px);
+          z-index: -1;
+        }
+      `}</style>
+
       <div
-        className="rounded-lg p-8 max-w-md w-full mx-4 relative"
+        className="rounded-lg p-8 max-w-md w-full mx-4 relative modal-3d modal-glow"
         style={{ backgroundColor: colors.bg, borderColor: colors.border, border: '1px solid' }}
       >
+        <div className="modal-ornament"></div>
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1 hover:opacity-70 transition"
