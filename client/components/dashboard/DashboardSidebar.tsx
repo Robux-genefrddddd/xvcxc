@@ -4,12 +4,20 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getThemeColors } from "@/lib/theme-colors";
 
+interface UserPlan {
+  type: "free" | "premium";
+  storageLimit: number;
+  storageUsed: number;
+}
+
 interface DashboardSidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   userName: string;
   userEmail: string;
   theme: string;
+  userPlan?: UserPlan;
+  onUpgradeClick?: () => void;
 }
 
 const navItems = [
