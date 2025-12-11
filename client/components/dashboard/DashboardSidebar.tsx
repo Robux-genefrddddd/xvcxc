@@ -50,15 +50,11 @@ export function DashboardSidebar({
         to="/"
         className="flex items-center gap-3 mb-10 hover:opacity-80 transition-opacity"
       >
-        <div
-          className="w-8 h-8 rounded flex items-center justify-center font-bold text-sm"
-          style={{
-            backgroundColor: colors.primary,
-            color: colors.primaryForeground,
-          }}
-        >
-          PC
-        </div>
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets%2F91e2732f1c03487e879c66ee97e72712%2Fee08390eccc04e8dbea3ce5415d97e92?format=webp&width=800"
+          alt="PinPinCloud"
+          className="w-8 h-8"
+        />
         <span
           className="text-lg font-bold"
           style={{ color: colors.sidebarForeground }}
