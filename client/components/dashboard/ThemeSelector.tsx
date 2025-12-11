@@ -1,4 +1,4 @@
-import { Moon, Sun, Palette } from "lucide-react";
+import { Moon, Sun, Palette, Zap, Leaf, Sparkles } from "lucide-react";
 
 interface ThemeSelectorProps {
   theme: string;
@@ -10,19 +10,37 @@ const themes = [
     id: "dark",
     name: "Dark Mode",
     icon: Moon,
-    description: "Dark theme for comfortable night viewing",
+    description: "Professional dark theme for night viewing",
   },
   {
     id: "light",
     name: "Light Mode",
     icon: Sun,
-    description: "Light theme for daytime viewing",
+    description: "Soft light theme with pastel tones",
   },
   {
     id: "blue",
-    name: "Blue Theme",
+    name: "Ocean Blue",
     icon: Palette,
-    description: "Blue accent theme",
+    description: "Cool blue accent theme",
+  },
+  {
+    id: "purple",
+    name: "Purple Dream",
+    icon: Sparkles,
+    description: "Modern purple accent theme",
+  },
+  {
+    id: "green",
+    name: "Forest Green",
+    icon: Leaf,
+    description: "Nature-inspired green theme",
+  },
+  {
+    id: "amber",
+    name: "Warm Amber",
+    icon: Zap,
+    description: "Warm and energetic theme",
   },
 ];
 
