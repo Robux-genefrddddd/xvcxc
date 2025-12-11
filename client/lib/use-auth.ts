@@ -30,7 +30,7 @@ export function useAuth() {
           } else {
             const defaultPlan: UserPlan = {
               type: 'free',
-              storageLimit: 100 * 1024 * 1024,
+              storageLimit: 1 * 1024 * 1024 * 1024,
               storageUsed: 0,
               activatedAt: new Date().toISOString(),
             };
