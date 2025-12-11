@@ -77,15 +77,6 @@ export default function Dashboard() {
     storageUsed: 0,
   });
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false);
-
-  const { isMaintenanceEnabled, maintenanceMessage } = useMaintenanceMode();
-
-  useEffect(() => {
-    if (isMaintenanceEnabled) {
-      setMaintenanceModalOpen(true);
-    }
-  }, [isMaintenanceEnabled]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
