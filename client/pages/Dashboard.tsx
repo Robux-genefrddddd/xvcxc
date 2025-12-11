@@ -82,7 +82,7 @@ export default function Dashboard() {
       if (!auth.currentUser) return;
       const q = query(
         collection(db, "files"),
-        where("userId", "==", auth.currentUser.uid)
+        where("userId", "==", auth.currentUser.uid),
       );
       const docs = await getDocs(q);
       const fileList: FileItem[] = docs.docs.map((doc) => ({
@@ -109,7 +109,7 @@ export default function Dashboard() {
     try {
       const fileRef = ref(
         storage,
-        `files/${auth.currentUser.uid}/${Date.now()}_${file.name}`
+        `files/${auth.currentUser.uid}/${Date.now()}_${file.name}`,
       );
       await uploadBytes(fileRef, file);
 
@@ -210,7 +210,10 @@ export default function Dashboard() {
     }
   };
 
-  const handleUpdateUserRole = async (userId: string, newRole: "admin" | "user") => {
+  const handleUpdateUserRole = async (
+    userId: string,
+    newRole: "admin" | "user",
+  ) => {
     try {
       await updateDoc(doc(db, "users", userId), { role: newRole });
       loadUsers();
@@ -367,9 +370,7 @@ export default function Dashboard() {
               >
                 Welcome {userName}! 👋
               </h1>
-              <p
-                style={{ color: theme === "dark" ? "#9CA3AF" : "#6B7280" }}
-              >
+              <p style={{ color: theme === "dark" ? "#9CA3AF" : "#6B7280" }}>
                 {activeTab === "files" && "Manage and share your files"}
                 {activeTab === "users" && "Manage team members"}
                 {activeTab === "theme" && "Customize your theme"}
@@ -435,7 +436,12 @@ export default function Dashboard() {
                   borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB",
                 }}
               >
-                <div className="px-6 py-4 border-b" style={{ borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB" }}>
+                <div
+                  className="px-6 py-4 border-b"
+                  style={{
+                    borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB",
+                  }}
+                >
                   <h2
                     className="text-xl font-bold"
                     style={{ color: theme === "dark" ? "#FFFFFF" : "#111827" }}
@@ -443,16 +449,29 @@ export default function Dashboard() {
                     My Files {files.length > 0 && `(${files.length})`}
                   </h2>
                 </div>
-                <div className="divide-y" style={{ borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB" }}>
+                <div
+                  className="divide-y"
+                  style={{
+                    borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB",
+                  }}
+                >
                   {loading ? (
                     <div className="px-6 py-8 text-center">
-                      <p style={{ color: theme === "dark" ? "#9CA3AF" : "#6B7280" }}>
+                      <p
+                        style={{
+                          color: theme === "dark" ? "#9CA3AF" : "#6B7280",
+                        }}
+                      >
                         Loading files...
                       </p>
                     </div>
                   ) : files.length === 0 ? (
                     <div className="px-6 py-8 text-center">
-                      <p style={{ color: theme === "dark" ? "#9CA3AF" : "#6B7280" }}>
+                      <p
+                        style={{
+                          color: theme === "dark" ? "#9CA3AF" : "#6B7280",
+                        }}
+                      >
                         No files yet. Upload one to get started!
                       </p>
                     </div>
@@ -489,7 +508,8 @@ export default function Dashboard() {
                             <span
                               className="px-2 py-1 rounded text-xs font-medium"
                               style={{
-                                backgroundColor: theme === "dark" ? "#1A2647" : "#DBEAFE",
+                                backgroundColor:
+                                  theme === "dark" ? "#1A2647" : "#DBEAFE",
                                 color: theme === "dark" ? "#60A5FA" : "#1E40AF",
                               }}
                             >
@@ -598,7 +618,12 @@ export default function Dashboard() {
                   borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB",
                 }}
               >
-                <div className="px-6 py-4 border-b" style={{ borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB" }}>
+                <div
+                  className="px-6 py-4 border-b"
+                  style={{
+                    borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB",
+                  }}
+                >
                   <h2
                     className="text-xl font-bold"
                     style={{ color: theme === "dark" ? "#FFFFFF" : "#111827" }}
@@ -606,10 +631,19 @@ export default function Dashboard() {
                     Team Members
                   </h2>
                 </div>
-                <div className="divide-y" style={{ borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB" }}>
+                <div
+                  className="divide-y"
+                  style={{
+                    borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB",
+                  }}
+                >
                   {users.length === 0 ? (
                     <div className="px-6 py-8 text-center">
-                      <p style={{ color: theme === "dark" ? "#9CA3AF" : "#6B7280" }}>
+                      <p
+                        style={{
+                          color: theme === "dark" ? "#9CA3AF" : "#6B7280",
+                        }}
+                      >
                         No users yet
                       </p>
                     </div>
@@ -643,13 +677,15 @@ export default function Dashboard() {
                             onChange={(e) =>
                               handleUpdateUserRole(
                                 user.id,
-                                e.target.value as "admin" | "user"
+                                e.target.value as "admin" | "user",
                               )
                             }
                             className="px-3 py-1 rounded text-sm border"
                             style={{
-                              backgroundColor: theme === "dark" ? "#141518" : "#FFFFFF",
-                              borderColor: theme === "dark" ? "#1F2124" : "#E5E7EB",
+                              backgroundColor:
+                                theme === "dark" ? "#141518" : "#FFFFFF",
+                              borderColor:
+                                theme === "dark" ? "#1F2124" : "#E5E7EB",
                               color: theme === "dark" ? "#FFFFFF" : "#111827",
                             }}
                           >
@@ -709,10 +745,13 @@ export default function Dashboard() {
                       key={t.id}
                       onClick={() => handleThemeChange(t.id)}
                       className={`p-6 rounded-lg border-2 transition-all ${
-                        theme === t.id ? "border-blue-500" : "border-transparent"
+                        theme === t.id
+                          ? "border-blue-500"
+                          : "border-transparent"
                       }`}
                       style={{
-                        backgroundColor: theme === "dark" ? "#141518" : "#FFFFFF",
+                        backgroundColor:
+                          theme === "dark" ? "#141518" : "#FFFFFF",
                         borderColor:
                           theme === t.id
                             ? "#3B82F6"

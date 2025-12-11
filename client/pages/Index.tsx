@@ -42,14 +42,18 @@ export default function Index() {
     setError("");
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
       if (!userCredential.user.emailVerified) {
         setError("Please verify your email before signing in");
         await signOut(auth);
         return;
       }
-      
+
       navigate("/dashboard");
     } catch (err: unknown) {
       const error = err as { code?: string; message?: string };
@@ -96,7 +100,7 @@ export default function Index() {
       await sendEmailVerification(userCredential.user);
       setVerificationSent(true);
       setError("");
-      
+
       setTimeout(() => {
         setEmail("");
         setPassword("");
@@ -214,7 +218,8 @@ export default function Index() {
                 Verify your email
               </h1>
               <p className="text-slate-400 text-base">
-                We've sent a verification link to {email}. Check your inbox and click the link to activate your account.
+                We've sent a verification link to {email}. Check your inbox and
+                click the link to activate your account.
               </p>
             </>
           ) : (
@@ -242,7 +247,10 @@ export default function Index() {
           {!verificationSent ? (
             <>
               {/* Tabs */}
-              <div className="flex gap-3 p-1 bg-slate-800/50 rounded-lg border" style={{ borderColor: "#1F2124" }}>
+              <div
+                className="flex gap-3 p-1 bg-slate-800/50 rounded-lg border"
+                style={{ borderColor: "#1F2124" }}
+              >
                 <button
                   onClick={() => {
                     setIsLogin(true);
@@ -409,14 +417,16 @@ export default function Index() {
                   {!isLogin && password && (
                     <div className="space-y-2 pt-3">
                       <div className="grid grid-cols-4 gap-2">
-                        {Object.entries(passwordStrength).map(([key, value]) => (
-                          <div
-                            key={key}
-                            className={`h-1 rounded-full transition ${
-                              value ? "bg-blue-500" : "bg-slate-700"
-                            }`}
-                          />
-                        ))}
+                        {Object.entries(passwordStrength).map(
+                          ([key, value]) => (
+                            <div
+                              key={key}
+                              className={`h-1 rounded-full transition ${
+                                value ? "bg-blue-500" : "bg-slate-700"
+                              }`}
+                            />
+                          ),
+                        )}
                       </div>
                       <p
                         className={`text-xs font-medium ${
@@ -459,7 +469,9 @@ export default function Index() {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="absolute right-3.5 top-3.5 text-slate-500 hover:text-slate-400 transition"
                       >
                         {showConfirmPassword ? (
@@ -530,7 +542,9 @@ export default function Index() {
                   {loading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>{isLogin ? "Signing in..." : "Creating account..."}</span>
+                      <span>
+                        {isLogin ? "Signing in..." : "Creating account..."}
+                      </span>
                     </>
                   ) : (
                     <>
@@ -585,9 +599,14 @@ export default function Index() {
               </form>
 
               {/* Footer */}
-              <div className="text-center pt-6 border-t" style={{ borderColor: "#1F2124" }}>
+              <div
+                className="text-center pt-6 border-t"
+                style={{ borderColor: "#1F2124" }}
+              >
                 <p className="text-slate-400 text-sm">
-                  {isLogin ? "Don't have an account? " : "Already have an account? "}
+                  {isLogin
+                    ? "Don't have an account? "
+                    : "Already have an account? "}
                   <button
                     onClick={() => {
                       setIsLogin(!isLogin);
@@ -613,9 +632,12 @@ export default function Index() {
                 <Mail className="w-8 h-8 text-slate-200" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">Check your inbox</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">
+                  Check your inbox
+                </h2>
                 <p className="text-slate-400 text-sm">
-                  Verification email has been sent. Click the link to activate your account.
+                  Verification email has been sent. Click the link to activate
+                  your account.
                 </p>
               </div>
               <button

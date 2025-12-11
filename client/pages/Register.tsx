@@ -434,7 +434,10 @@ export default function Register() {
           </form>
 
           {/* Footer */}
-          <div className="text-center pt-6 border-t" style={{ borderColor: "#1F2124" }}>
+          <div
+            className="text-center pt-6 border-t"
+            style={{ borderColor: "#1F2124" }}
+          >
             <p className="text-slate-400 text-sm">
               Already have an account?{" "}
               <Link
