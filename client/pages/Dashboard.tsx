@@ -259,6 +259,15 @@ export default function Dashboard() {
         storagePath: fileRef.fullPath,
       });
 
+      // Update storage used in Firestore
+      try {
+        const planRef = doc(db, "userPlans", auth.currentUser.uid);
+        const newStorageUsed = userPlan.storageUsed + file.size;
+        await updateDoc(planRef, { storageUsed: newStorageUsed });
+      } catch (error) {
+        console.error("Error updating storage after upload:", error);
+      }
+
       // Complete
       setUploadProgress(100);
       setUploadStage("complete");
