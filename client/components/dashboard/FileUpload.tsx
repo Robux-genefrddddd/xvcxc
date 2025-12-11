@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Upload, X } from "lucide-react";
+import { getThemeColors } from "@/lib/theme-colors";
 
 interface FileUploadProps {
   onFileSelected: (file: File) => void;
@@ -8,6 +9,7 @@ interface FileUploadProps {
 }
 
 export function FileUpload({ onFileSelected, uploading, theme }: FileUploadProps) {
+  const colors = getThemeColors(theme);
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
 
@@ -44,17 +46,11 @@ export function FileUpload({ onFileSelected, uploading, theme }: FileUploadProps
       className="rounded-xl border-2 p-10 text-center transition-all"
       style={{
         backgroundColor: dragActive
-          ? theme === "dark"
-            ? "#1A2328"
-            : "#F0F9FF"
-          : theme === "dark"
-            ? "#111214"
-            : "#F9FAFB",
+          ? colors.accentLight
+          : colors.card,
         borderColor: dragActive
-          ? "#3B82F6"
-          : theme === "dark"
-            ? "#1F2124"
-            : "#E5E7EB",
+          ? colors.primary
+          : colors.border,
         borderStyle: "dashed",
       }}
       onDragEnter={handleDrag}
@@ -75,14 +71,13 @@ export function FileUpload({ onFileSelected, uploading, theme }: FileUploadProps
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center"
           style={{
-            backgroundColor:
-              theme === "dark" ? "rgba(59, 130, 246, 0.1)" : "#DBEAFE",
+            backgroundColor: colors.accentLight,
           }}
         >
           <Upload
             className="w-8 h-8"
             style={{
-              color: theme === "dark" ? "#60A5FA" : "#3B82F6",
+              color: colors.primary,
             }}
           />
         </div>
@@ -91,7 +86,7 @@ export function FileUpload({ onFileSelected, uploading, theme }: FileUploadProps
           <p
             className="font-semibold text-base"
             style={{
-              color: theme === "dark" ? "#FFFFFF" : "#111827",
+              color: colors.text,
             }}
           >
             {dragActive ? "Drop your file here" : "Click to upload or drag and drop"}
@@ -99,7 +94,7 @@ export function FileUpload({ onFileSelected, uploading, theme }: FileUploadProps
           <p
             className="text-sm mt-1"
             style={{
-              color: theme === "dark" ? "#9CA3AF" : "#6B7280",
+              color: colors.textSecondary,
             }}
           >
             Any file type • Maximum 100MB • Secure cloud storage
@@ -111,8 +106,8 @@ export function FileUpload({ onFileSelected, uploading, theme }: FileUploadProps
           disabled={uploading}
           className="mt-2 px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
           style={{
-            backgroundColor: theme === "dark" ? "#1A2647" : "#DBEAFE",
-            color: theme === "dark" ? "#60A5FA" : "#1E40AF",
+            backgroundColor: colors.accentLight,
+            color: colors.primary,
           }}
         >
           {uploading ? "Uploading..." : "Browse Files"}
