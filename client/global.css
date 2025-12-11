@@ -99,13 +99,30 @@
 }
 
 @layer base {
+  :root {
+    --bg-primary: #0E0E0F;
+    --bg-secondary: #111214;
+    --bg-card: #141518;
+    --text-primary: #FFFFFF;
+    --text-muted: #9CA3AF;
+    --border-color: #1F2124;
+    --color-primary: #60A5FA;
+  }
+
   * {
     @apply border-border;
+  }
+
+  html {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: "Inter", sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
