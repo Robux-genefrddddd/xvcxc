@@ -37,14 +37,31 @@ export function FilesList({
 
   const handleDownload = async (file: FileItem) => {
     if (!file.storagePath) {
-      alert("File not found");
+      alert("File storage path not found. Please try again.");
       return;
     }
 
     setDownloadingId(file.id);
     try {
       const fileRef = ref(storage, file.storagePath);
-      const bytes = await getBytes(fileRef);
+
+      // Get file bytes with better error handling
+      let bytes;
+      try {
+        bytes = await getBytes(fileRef);
+      } catch (storageError) {
+        console.error("Firebase Storage error:", storageError);
+
+        // Check for common Firebase Storage errors
+        const errorMsg = storageError instanceof Error ? storageError.message : String(storageError);
+        if (errorMsg.includes("auth/unauthenticated") || errorMsg.includes("permission-denied")) {
+          throw new Error("Access denied. Please try logging in again.");
+        } else if (errorMsg.includes("storage/object-not-found")) {
+          throw new Error("File not found in storage. It may have been deleted.");
+        } else {
+          throw new Error(`Storage error: ${errorMsg}`);
+        }
+      }
 
       // Create blob with proper type
       const blob = new Blob([bytes], { type: "application/octet-stream" });
@@ -67,9 +84,8 @@ export function FilesList({
       }, 100);
     } catch (error) {
       console.error("Error downloading file:", error);
-      alert(
-        `Failed to download file: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      alert(`Failed to download file: ${errorMessage}`);
     } finally {
       setDownloadingId(null);
     }
