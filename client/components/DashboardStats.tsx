@@ -1,0 +1,114 @@
+import { FileText, Share2, HardDrive } from 'lucide-react';
+
+interface DashboardStatsProps {
+  totalFiles: number;
+  sharedFiles: number;
+  storageUsed: number;
+  storageLimit: number | null;
+  theme: string;
+}
+
+export default function DashboardStats({
+  totalFiles,
+  sharedFiles,
+  storageUsed,
+  storageLimit,
+  theme,
+}: DashboardStatsProps) {
+  const themeColors = {
+    dark: {
+      bg: '#111214',
+      card: '#141518',
+      border: '#1F2124',
+      text: '#FFFFFF',
+      textMuted: '#9CA3AF',
+      primary: '#60A5FA',
+    },
+    light: {
+      bg: '#FFFFFF',
+      card: '#F9FAFB',
+      border: '#E5E7EB',
+      text: '#111827',
+      textMuted: '#6B7280',
+      primary: '#3B82F6',
+    },
+    blue: {
+      bg: '#0F172A',
+      card: '#1E3A8A',
+      border: '#1E40AF',
+      text: '#FFFFFF',
+      textMuted: '#93C5FD',
+      primary: '#60A5FA',
+    },
+  };
+
+  const colors = themeColors[theme as keyof typeof themeColors] || themeColors.dark;
+
+  const formatBytes = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+  };
+
+  const storagePercentage =
+    storageLimit && storageLimit > 0
+      ? (storageUsed / storageLimit) * 100
+      : 0;
+
+  const stats = [
+    {
+      title: 'Total Files',
+      value: totalFiles,
+      icon: FileText,
+      gradient: 'from-blue-500 to-blue-600',
+    },
+    {
+      title: 'Shared Files',
+      value: sharedFiles,
+      icon: Share2,
+      gradient: 'from-purple-500 to-purple-600',
+    },
+    {
+      title: 'Storage Used',
+      value: formatBytes(storageUsed),
+      icon: HardDrive,
+      gradient: 'from-green-500 to-green-600',
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      {stats.map((stat) => {
+        const Icon = stat.icon;
+        return (
+          <div
+            key={stat.title}
+            className={`rounded-lg p-6 border bg-gradient-to-br ${stat.gradient} overflow-hidden relative`}
+            style={{
+              borderColor: colors.border,
+              background: `linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(96, 165, 250, 0.1) 100%)`,
+            }}
+          >
+            <div className="flex items-start justify-between relative z-10">
+              <div>
+                <p style={{ color: colors.textMuted }} className="text-sm font-medium mb-2">
+                  {stat.title}
+                </p>
+                <p className="text-3xl font-bold" style={{ color: colors.text }}>
+                  {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
+                </p>
+              </div>
+              <div
+                className={`p-3 rounded-lg bg-gradient-to-br ${stat.gradient}`}
+              >
+                <Icon className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
