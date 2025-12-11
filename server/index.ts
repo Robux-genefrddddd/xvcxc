@@ -20,5 +20,8 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Premium key generation endpoint (should be protected in production)
+  app.post("/api/generate-premium-key", handleGenerateKey);
+
   return app;
 }
