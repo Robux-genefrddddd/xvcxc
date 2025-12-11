@@ -423,11 +423,6 @@ export default function Dashboard() {
           {/* Files Tab */}
           {activeTab === "files" && (
             <div className="space-y-6">
-              <PlanStatus
-                plan={userPlan}
-                theme={theme}
-                onUpgradeClick={() => setPlanUpgradeModalOpen(true)}
-              />
               <FileUpload
                 onFileSelected={handleFileUpload}
                 uploading={uploading}
