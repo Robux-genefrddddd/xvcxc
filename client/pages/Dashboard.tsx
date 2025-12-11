@@ -451,6 +451,15 @@ export default function Dashboard() {
         onClose={handleCloseUploadModal}
         theme={theme}
       />
+
+      {/* Plan Upgrade Modal */}
+      <PlanUpgradeModal
+        isOpen={planUpgradeModalOpen}
+        onClose={() => setPlanUpgradeModalOpen(false)}
+        theme={theme}
+        userId={userId || ""}
+        onUpgradePlan={(plan) => setUserPlan(plan)}
+      />
     </div>
   );
 }
