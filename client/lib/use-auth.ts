@@ -5,7 +5,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export interface UserPlan {
   type: 'free' | 'premium';
-  storageLimit: number;
+  storageLimit: number | null;
   storageUsed: number;
   activatedAt: string;
 }
