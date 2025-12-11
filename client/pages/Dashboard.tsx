@@ -423,6 +423,7 @@ export default function Dashboard() {
           {/* Files Tab */}
           {activeTab === "files" && (
             <div className="space-y-6">
+              <DashboardStats files={files} theme={theme} plan={userPlan} />
               <FileUpload
                 onFileSelected={handleFileUpload}
                 uploading={uploading}
