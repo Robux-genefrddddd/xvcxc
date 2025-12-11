@@ -6,6 +6,7 @@ import { ThemeSelector } from "@/components/dashboard/ThemeSelector";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { UploadModal, MAX_FILE_SIZE } from "@/components/dashboard/UploadModal";
 import { auth, db, storage } from "@/lib/firebase";
+import { getThemeColors, getThemeBackgroundImage } from "@/lib/theme-colors";
 import {
   collection,
   addDoc,
@@ -265,15 +266,14 @@ export default function Dashboard() {
     }
   };
 
+  const themeColors = getThemeColors(theme);
+
   return (
     <div
       className="min-h-screen flex"
       style={{
-        backgroundColor: theme === "dark" ? "#0E0E0F" : "#FFFFFF",
-        backgroundImage:
-          theme === "dark"
-            ? "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23222223' fill-opacity='0.08'%3E%3Cpath d='M29 30l-1-1 1-1 1 1-1 1M30 29l-1-1 1-1 1 1-1 1M30 31l-1 1 1 1 1-1-1-1M31 30l 1-1-1-1-1 1 1 1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
-            : "none",
+        backgroundColor: themeColors.background,
+        backgroundImage: getThemeBackgroundImage(theme),
       }}
     >
       {/* Sidebar */}
