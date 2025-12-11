@@ -10,3 +10,29 @@
 export interface DemoResponse {
   message: string;
 }
+
+/**
+ * Premium Key schema with validation and metadata
+ */
+export interface PremiumKeyData {
+  key: string;
+  status: "unused" | "used";
+  type: "monthly" | "yearly" | "lifetime";
+  maxEmojis?: number;
+  assignedTo?: string;
+  assignedEmail?: string;
+  createdAt: string;
+  usedAt?: string;
+  expiresAt?: string;
+  isActive: boolean;
+  createdBy: string;
+}
+
+/**
+ * Maintenance mode configuration
+ */
+export interface MaintenanceConfig {
+  enabled: boolean;
+  message: string;
+  lastUpdated: string;
+}
