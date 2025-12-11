@@ -155,14 +155,10 @@ export default function Dashboard() {
 
       // Update user plan storage used
       if (userId) {
-        const userPlanRef = doc(db, "userPlans", userId);
-        const userPlanDoc = await getDoc(userPlanRef);
-        if (userPlanDoc.exists()) {
-          setUserPlan({
-            ...userPlan,
-            storageUsed: totalSize,
-          });
-        }
+        setUserPlan((prevPlan) => ({
+          ...prevPlan,
+          storageUsed: totalSize,
+        }));
       }
     } catch (error) {
       console.error("Error loading files:", error);
