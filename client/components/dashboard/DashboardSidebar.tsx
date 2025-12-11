@@ -4,12 +4,20 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getThemeColors } from "@/lib/theme-colors";
 
+interface UserPlan {
+  type: "free" | "premium";
+  storageLimit: number;
+  storageUsed: number;
+}
+
 interface DashboardSidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   userName: string;
   userEmail: string;
   theme: string;
+  userPlan?: UserPlan;
+  onUpgradeClick?: () => void;
 }
 
 const navItems = [
@@ -24,8 +32,15 @@ export function DashboardSidebar({
   userName,
   userEmail,
   theme,
+  userPlan,
+  onUpgradeClick,
 }: DashboardSidebarProps) {
   const colors = getThemeColors(theme);
+  const storageLimitMB = userPlan ? userPlan.storageLimit / (1024 * 1024) : 100;
+  const storageUsedMB = userPlan ? userPlan.storageUsed / (1024 * 1024) : 0;
+  const storagePercentage = userPlan
+    ? (userPlan.storageUsed / userPlan.storageLimit) * 100
+    : 0;
 
   const handleLogout = async () => {
     try {
@@ -50,15 +65,11 @@ export function DashboardSidebar({
         to="/"
         className="flex items-center gap-3 mb-10 hover:opacity-80 transition-opacity"
       >
-        <div
-          className="w-8 h-8 rounded flex items-center justify-center font-bold text-sm"
-          style={{
-            backgroundColor: colors.primary,
-            color: colors.primaryForeground,
-          }}
-        >
-          PC
-        </div>
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets%2F91e2732f1c03487e879c66ee97e72712%2Fee08390eccc04e8dbea3ce5415d97e92?format=webp&width=800"
+          alt="PinPinCloud"
+          className="w-8 h-8"
+        />
         <span
           className="text-lg font-bold"
           style={{ color: colors.sidebarForeground }}
@@ -99,15 +110,11 @@ export function DashboardSidebar({
         }}
       >
         <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold"
-            style={{
-              backgroundColor: colors.primary,
-              color: colors.primaryForeground,
-            }}
-          >
-            {userName.charAt(0).toUpperCase()}
-          </div>
+          <img
+            src="https://marketplace.canva.com/Dz63E/MAF4KJDz63E/1/tl/canva-user-icon-MAF4KJDz63E.png"
+            alt="User Avatar"
+            className="w-10 h-10 rounded-lg object-cover"
+          />
           <div className="flex-1 min-w-0">
             <p
               className="text-sm font-semibold truncate"
@@ -123,6 +130,79 @@ export function DashboardSidebar({
             </p>
           </div>
         </div>
+
+        {/* Plan Badge */}
+        {userPlan && (
+          <div
+            className="px-3 py-2 rounded-lg text-xs font-semibold"
+            style={{
+              backgroundColor:
+                userPlan.type === "premium"
+                  ? "rgba(34, 197, 94, 0.1)"
+                  : "rgba(59, 130, 246, 0.1)",
+              color: userPlan.type === "premium" ? "#22C55E" : colors.primary,
+            }}
+          >
+            {userPlan.type === "premium" ? "✓ Premium" : "Free Plan"}
+          </div>
+        )}
+
+        {/* Storage Progress */}
+        {userPlan && (
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <p
+                className="text-xs font-medium"
+                style={{
+                  color: colors.textSecondary,
+                }}
+              >
+                Storage
+              </p>
+              <p
+                className="text-xs font-semibold"
+                style={{
+                  color: colors.text,
+                }}
+              >
+                {storageUsedMB.toFixed(0)}MB / {storageLimitMB.toFixed(0)}MB
+              </p>
+            </div>
+            <div
+              className="w-full h-1.5 rounded-full overflow-hidden"
+              style={{
+                backgroundColor: colors.accentLight,
+              }}
+            >
+              <div
+                className="h-full transition-all duration-300 rounded-full"
+                style={{
+                  width: `${Math.min(storagePercentage, 100)}%`,
+                  backgroundColor:
+                    storagePercentage > 90
+                      ? "#EF4444"
+                      : storagePercentage > 70
+                        ? "#F59E0B"
+                        : colors.primary,
+                }}
+              ></div>
+            </div>
+          </div>
+        )}
+
+        {userPlan && userPlan.type === "free" && onUpgradeClick && (
+          <button
+            onClick={onUpgradeClick}
+            className="w-full px-3 py-2 rounded-lg text-xs font-semibold transition-opacity hover:opacity-80"
+            style={{
+              backgroundColor: colors.accentLight,
+              color: colors.primary,
+            }}
+          >
+            Upgrade
+          </button>
+        )}
+
         <button
           onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors border font-medium"

@@ -36,24 +36,40 @@ export function FilesList({
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const handleDownload = async (file: FileItem) => {
-    if (!file.storagePath) return;
+    if (!file.storagePath) {
+      alert("File not found");
+      return;
+    }
 
     setDownloadingId(file.id);
     try {
       const fileRef = ref(storage, file.storagePath);
       const bytes = await getBytes(fileRef);
-      const blob = new Blob([bytes]);
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = file.name;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+
+      // Create blob with proper type
+      const blob = new Blob([bytes], { type: "application/octet-stream" });
+
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = file.name || "download";
+      link.style.display = "none";
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 100);
     } catch (error) {
       console.error("Error downloading file:", error);
-      alert("Failed to download file");
+      alert(
+        `Failed to download file: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     } finally {
       setDownloadingId(null);
     }

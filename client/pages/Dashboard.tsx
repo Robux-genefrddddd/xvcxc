@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FileUpload } from "@/components/dashboard/FileUpload";
 import { FilesList } from "@/components/dashboard/FilesList";
 import { UserManagement } from "@/components/dashboard/UserManagement";
 import { ThemeSelector } from "@/components/dashboard/ThemeSelector";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { UploadModal, MAX_FILE_SIZE } from "@/components/dashboard/UploadModal";
+import { PlanUpgradeModal } from "@/components/dashboard/PlanUpgradeModal";
+import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { auth, db, storage } from "@/lib/firebase";
 import { getThemeColors, getThemeBackgroundImage } from "@/lib/theme-colors";
 import {
@@ -16,8 +19,11 @@ import {
   updateDoc,
   query,
   where,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, deleteObject } from "firebase/storage";
+import { onAuthStateChanged } from "firebase/auth";
 
 interface FileItem {
   id: string;
@@ -36,10 +42,19 @@ interface User {
   role: "admin" | "user";
 }
 
+interface UserPlan {
+  type: "free" | "premium";
+  storageLimit: number;
+  storageUsed: number;
+  validatedAt?: string;
+}
+
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("files");
   const [userName, setUserName] = useState("User");
   const [userEmail, setUserEmail] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,17 +67,53 @@ export default function Dashboard() {
   >("validating");
   const [uploadFileName, setUploadFileName] = useState("");
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [planUpgradeModalOpen, setPlanUpgradeModalOpen] = useState(false);
+  const [userPlan, setUserPlan] = useState<UserPlan>({
+    type: "free",
+    storageLimit: 100 * 1024 * 1024,
+    storageUsed: 0,
+  });
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
-    if (auth.currentUser) {
-      setUserName(auth.currentUser.displayName || "User");
-      setUserEmail(auth.currentUser.email || "");
-    }
-    const savedTheme = localStorage.getItem("app-theme") || "dark";
-    setTheme(savedTheme);
-    loadFiles();
-    loadUsers();
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUserId(user.uid);
+        setUserName(user.displayName || "User");
+        setUserEmail(user.email || "");
+
+        // Load user plan
+        try {
+          const planRef = doc(db, "userPlans", user.uid);
+          const planDoc = await getDoc(planRef);
+          if (planDoc.exists()) {
+            setUserPlan(planDoc.data() as UserPlan);
+          } else {
+            // Initialize free plan for new users
+            const initialPlan: UserPlan = {
+              type: "free",
+              storageLimit: 100 * 1024 * 1024,
+              storageUsed: 0,
+            };
+            await setDoc(planRef, initialPlan);
+            setUserPlan(initialPlan);
+          }
+        } catch (error) {
+          console.error("Error loading user plan:", error);
+        }
+
+        const savedTheme = localStorage.getItem("app-theme") || "dark";
+        setTheme(savedTheme);
+        loadFiles();
+        loadUsers();
+      } else {
+        navigate("/login");
+      }
+      setIsAuthLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   // ============= FILES MANAGEMENT =============
   const loadFiles = async () => {
@@ -84,6 +135,25 @@ export default function Dashboard() {
         storagePath: doc.data().storagePath,
       }));
       setFiles(fileList);
+
+      // Calculate storage used
+      let totalSize = 0;
+      fileList.forEach((file) => {
+        const sizeStr = file.size;
+        if (sizeStr.includes("MB")) {
+          totalSize += parseFloat(sizeStr) * 1024 * 1024;
+        } else if (sizeStr.includes("KB")) {
+          totalSize += parseFloat(sizeStr) * 1024;
+        }
+      });
+
+      // Update user plan storage used
+      if (userId) {
+        setUserPlan((prevPlan) => ({
+          ...prevPlan,
+          storageUsed: totalSize,
+        }));
+      }
     } catch (error) {
       console.error("Error loading files:", error);
     } finally {
@@ -277,6 +347,26 @@ export default function Dashboard() {
     }
   };
 
+  // Apply theme to document root
+  useEffect(() => {
+    const colors = getThemeColors(theme);
+    document.documentElement.style.backgroundColor = colors.background;
+    document.documentElement.style.color = colors.text;
+    document.body.style.backgroundColor = colors.background;
+    document.body.style.color = colors.text;
+  }, [theme]);
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <p className="mt-4 text-gray-500">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   const themeColors = getThemeColors(theme);
 
   return (
@@ -294,6 +384,8 @@ export default function Dashboard() {
         userName={userName}
         userEmail={userEmail}
         theme={theme}
+        userPlan={userPlan}
+        onUpgradeClick={() => setPlanUpgradeModalOpen(true)}
       />
 
       {/* Main Content */}
@@ -331,6 +423,7 @@ export default function Dashboard() {
           {/* Files Tab */}
           {activeTab === "files" && (
             <div className="space-y-6">
+              <DashboardStats files={files} theme={theme} plan={userPlan} />
               <FileUpload
                 onFileSelected={handleFileUpload}
                 uploading={uploading}
@@ -376,6 +469,15 @@ export default function Dashboard() {
         error={uploadError || undefined}
         onClose={handleCloseUploadModal}
         theme={theme}
+      />
+
+      {/* Plan Upgrade Modal */}
+      <PlanUpgradeModal
+        isOpen={planUpgradeModalOpen}
+        onClose={() => setPlanUpgradeModalOpen(false)}
+        theme={theme}
+        userId={userId || ""}
+        onUpgradePlan={(plan) => setUserPlan(plan)}
       />
     </div>
   );
