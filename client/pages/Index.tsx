@@ -122,7 +122,10 @@ export default function Index() {
       setVerificationSent(true);
       setError("");
 
-      console.log("Registration successful with reCAPTCHA token:", recaptchaToken);
+      console.log(
+        "Registration successful with reCAPTCHA token:",
+        recaptchaToken,
+      );
 
       setTimeout(() => {
         setEmail("");

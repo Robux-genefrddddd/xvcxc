@@ -90,16 +90,10 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
           Storage
         </p>
         <div className="flex items-baseline gap-1 mb-3">
-          <p
-            className="text-2xl font-semibold"
-            style={{ color: colors.text }}
-          >
+          <p className="text-2xl font-semibold" style={{ color: colors.text }}>
             {storageUsedMB.toFixed(1)}
           </p>
-          <p
-            className="text-sm"
-            style={{ color: colors.textSecondary }}
-          >
+          <p className="text-sm" style={{ color: colors.textSecondary }}>
             / {storageLimitMB.toFixed(0)} MB
           </p>
         </div>
@@ -116,7 +110,8 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
             className="h-1 rounded-full transition-all duration-300"
             style={{
               width: `${Math.min(storagePercent, 100)}%`,
-              backgroundColor: plan.type === "premium" ? "#10B981" : colors.primary,
+              backgroundColor:
+                plan.type === "premium" ? "#10B981" : colors.primary,
             }}
           />
         </div>
@@ -162,7 +157,12 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
         >
           Activity
         </p>
-        <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: "1rem" }}>
+        <div
+          style={{
+            borderTop: `1px solid ${colors.border}`,
+            paddingTop: "1rem",
+          }}
+        >
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={dailyData}>
               <CartesianGrid
@@ -212,9 +212,15 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
             .sort((a, b) => b.count - a.count)
             .map((item) => {
               const Icon = item.icon;
-              const percentage = totalFiles > 0 ? ((item.count / totalFiles) * 100).toFixed(0) : "0";
+              const percentage =
+                totalFiles > 0
+                  ? ((item.count / totalFiles) * 100).toFixed(0)
+                  : "0";
               return (
-                <div key={item.type} className="flex items-center justify-between">
+                <div
+                  key={item.type}
+                  className="flex items-center justify-between"
+                >
                   <div className="flex items-center gap-3">
                     <Icon
                       className="w-5 h-5"
@@ -243,10 +249,7 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
             })}
         </div>
         {totalFiles === 0 && (
-          <p
-            className="text-sm py-8"
-            style={{ color: colors.textSecondary }}
-          >
+          <p className="text-sm py-8" style={{ color: colors.textSecondary }}>
             No files yet
           </p>
         )}

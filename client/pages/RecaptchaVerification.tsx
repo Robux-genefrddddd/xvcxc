@@ -25,7 +25,7 @@ export default function RecaptchaVerification() {
   const [verificationComplete, setVerificationComplete] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state as LocationState || {};
+  const state = (location.state as LocationState) || {};
   const email = state.email || "";
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function RecaptchaVerification() {
 
         const token = await window.grecaptcha.enterprise.execute(
           RECAPTCHA_KEY,
-          { action: "login" }
+          { action: "login" },
         );
 
         console.log("reCAPTCHA Enterprise token generated:", token);
@@ -248,11 +248,10 @@ export default function RecaptchaVerification() {
                 <CheckCircle className="w-8 h-8 text-green-500" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  Welcome!
-                </h2>
+                <h2 className="text-2xl font-bold text-white mb-2">Welcome!</h2>
                 <p className="text-slate-400 text-sm">
-                  You have been verified successfully. Redirecting to dashboard...
+                  You have been verified successfully. Redirecting to
+                  dashboard...
                 </p>
               </div>
             </div>

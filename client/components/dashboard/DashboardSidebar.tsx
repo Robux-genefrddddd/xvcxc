@@ -116,7 +116,10 @@ export function DashboardSidebar({
       </nav>
 
       {/* User Info - Minimaliste */}
-      <div className="mt-6 pt-4 border-t space-y-3" style={{ borderColor: colors.border }}>
+      <div
+        className="mt-6 pt-4 border-t space-y-3"
+        style={{ borderColor: colors.border }}
+      >
         <div className="flex items-start gap-2">
           <div
             className="w-8 h-8 rounded text-xs flex items-center justify-center font-bold flex-shrink-0"
@@ -147,10 +150,16 @@ export function DashboardSidebar({
         {userPlan && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <p className="text-xs uppercase tracking-widest" style={{ color: colors.textSecondary }}>
+              <p
+                className="text-xs uppercase tracking-widest"
+                style={{ color: colors.textSecondary }}
+              >
                 Storage
               </p>
-              <p className="text-xs font-semibold" style={{ color: colors.text }}>
+              <p
+                className="text-xs font-semibold"
+                style={{ color: colors.text }}
+              >
                 {storageUsedMB.toFixed(0)}MB
               </p>
             </div>

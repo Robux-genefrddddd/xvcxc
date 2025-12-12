@@ -28,7 +28,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/recaptcha-verification" element={<RecaptchaVerification />} />
+          <Route
+            path="/recaptcha-verification"
+            element={<RecaptchaVerification />}
+          />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/share/:fileId" element={<Share />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
