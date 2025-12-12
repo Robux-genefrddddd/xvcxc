@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FileUpload } from "@/components/dashboard/FileUpload";
 import { FilesList } from "@/components/dashboard/FilesList";
+import { SharedFilesList } from "@/components/dashboard/SharedFilesList";
 import { UserManagement } from "@/components/dashboard/UserManagement";
 import { ThemeSelector } from "@/components/dashboard/ThemeSelector";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
