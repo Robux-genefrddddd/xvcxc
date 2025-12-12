@@ -471,6 +471,7 @@ export default function Dashboard() {
               style={{ color: themeColors.text }}
             >
               {activeTab === "files" && "Files"}
+              {activeTab === "shared" && "Shared Files"}
               {activeTab === "users" && "User Management"}
               {activeTab === "theme" && "Appearance"}
               {activeTab === "admin" && "Admin Panel"}
@@ -478,6 +479,8 @@ export default function Dashboard() {
             <p style={{ color: themeColors.textSecondary }} className="text-sm">
               {activeTab === "files" &&
                 "Manage, share, and organize your cloud storage"}
+              {activeTab === "shared" &&
+                "View and manage all your shared files"}
               {activeTab === "users" &&
                 "Control team members and access permissions"}
               {activeTab === "theme" &&
