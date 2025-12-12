@@ -87,23 +87,31 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
     <div className="space-y-6">
       {/* KPI LINE - COMPACT, PROFESSIONAL */}
       <div
-        className="flex gap-8 pb-6 border-b"
+        className="grid grid-cols-4 gap-8 pb-6 border-b"
         style={{ borderColor: colors.border }}
       >
         {/* Storage Used */}
-        <div className="flex-1">
+        <div className="col-span-2">
           <p
             className="text-xs font-medium uppercase tracking-wider mb-3"
             style={{ color: colors.textSecondary }}
           >
             Storage Used
           </p>
-          <p
-            className="text-3xl font-bold tracking-tight mb-2"
-            style={{ color: colors.text }}
-          >
-            {storageUsedMB.toFixed(1)} MB
-          </p>
+          <div className="mb-3">
+            <p
+              className="text-3xl font-bold tracking-tight mb-1"
+              style={{ color: colors.text }}
+            >
+              {storageUsedMB.toFixed(1)} <span className="text-lg font-semibold" style={{ color: colors.textSecondary }}>MB</span>
+            </p>
+            <p
+              className="text-xs"
+              style={{ color: colors.textSecondary }}
+            >
+              {storageLimitMB.toFixed(0)} MB limit
+            </p>
+          </div>
           <div
             className="h-1.5 rounded-full overflow-hidden"
             style={{
@@ -123,26 +131,20 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
               }}
             />
           </div>
-          <p
-            className="text-xs mt-2"
-            style={{ color: colors.textSecondary }}
-          >
-            {storageLimitMB.toFixed(0)} MB limit
-            {plan.type === "premium" && (
-              <span
-                style={{ color: colors.primary }}
-                className="ml-2 font-medium"
-              >
-                (Premium)
-              </span>
-            )}
-          </p>
+          {plan.type === "premium" && (
+            <p
+              style={{ color: colors.primary }}
+              className="text-xs mt-2 font-medium"
+            >
+              Premium Plan
+            </p>
+          )}
         </div>
 
         {/* Total Files */}
-        <div className="text-center">
+        <div>
           <p
-            className="text-xs font-medium uppercase tracking-wider mb-3"
+            className="text-xs font-medium uppercase tracking-wider mb-4"
             style={{ color: colors.textSecondary }}
           >
             Total Files
@@ -156,9 +158,9 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
         </div>
 
         {/* Shared Files */}
-        <div className="text-center">
+        <div>
           <p
-            className="text-xs font-medium uppercase tracking-wider mb-3"
+            className="text-xs font-medium uppercase tracking-wider mb-4"
             style={{ color: colors.textSecondary }}
           >
             Shared
@@ -168,22 +170,6 @@ export function DashboardStats({ files, theme, plan }: DashboardStatsProps) {
             style={{ color: colors.primary }}
           >
             {sharedFiles}
-          </p>
-        </div>
-
-        {/* Last Upload */}
-        <div className="text-right">
-          <p
-            className="text-xs font-medium uppercase tracking-wider mb-3"
-            style={{ color: colors.textSecondary }}
-          >
-            Last Upload
-          </p>
-          <p
-            className="text-sm font-medium"
-            style={{ color: colors.text }}
-          >
-            {lastUploadFile}
           </p>
         </div>
       </div>
