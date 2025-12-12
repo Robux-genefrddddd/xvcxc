@@ -8,6 +8,7 @@ import { UserRole, canToggleMaintenance } from "@/lib/auth-utils";
 interface MaintenanceConfig {
   enabled: boolean;
   message: string;
+  mode: "warning" | "global";
 }
 
 interface AdminMaintenanceModeProps {
@@ -24,10 +25,9 @@ export function AdminMaintenanceMode({
     enabled: false,
     message:
       "The system is currently under maintenance. Please try again later.",
+    mode: "warning",
   });
   const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     loadConfig();
@@ -44,6 +44,7 @@ export function AdminMaintenanceMode({
           message:
             data.message ||
             "The system is currently under maintenance. Please try again later.",
+          mode: data.mode || "warning",
         });
       }
     } catch (error) {
@@ -53,40 +54,43 @@ export function AdminMaintenanceMode({
     }
   };
 
+  const saveConfig = async (newConfig: MaintenanceConfig) => {
+    try {
+      await setDoc(doc(db, "appConfig", "maintenance"), {
+        enabled: newConfig.enabled,
+        message: newConfig.message,
+        mode: newConfig.mode,
+        lastUpdated: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Error saving maintenance config:", error);
+    }
+  };
+
   const handleToggleMaintenance = () => {
     if (!canToggleMaintenance(userRole)) {
       alert("You don't have permission to toggle maintenance mode");
       return;
     }
-    setConfig({ ...config, enabled: !config.enabled });
+    const newConfig = { ...config, enabled: !config.enabled };
+    setConfig(newConfig);
+    saveConfig(newConfig);
   };
 
   const handleMessageChange = (newMessage: string) => {
-    setConfig({ ...config, message: newMessage });
+    const newConfig = { ...config, message: newMessage };
+    setConfig(newConfig);
+    saveConfig(newConfig);
   };
 
-  const handleSave = async () => {
+  const handleModeChange = (newMode: "warning" | "global") => {
     if (!canToggleMaintenance(userRole)) {
-      alert("You don't have permission to save maintenance settings");
+      alert("You don't have permission to change maintenance mode");
       return;
     }
-
-    setSaving(true);
-    try {
-      await setDoc(doc(db, "appConfig", "maintenance"), {
-        enabled: config.enabled,
-        message: config.message,
-        lastUpdated: new Date().toISOString(),
-      });
-      setMessage("Settings saved successfully!");
-      setTimeout(() => setMessage(""), 3000);
-    } catch (error) {
-      console.error("Error saving maintenance config:", error);
-      setMessage("Failed to save settings");
-      setTimeout(() => setMessage(""), 3000);
-    } finally {
-      setSaving(false);
-    }
+    const newConfig = { ...config, mode: newMode };
+    setConfig(newConfig);
+    saveConfig(newConfig);
   };
 
   if (!canToggleMaintenance(userRole)) {
@@ -115,39 +119,10 @@ export function AdminMaintenanceMode({
 
   return (
     <div className="space-y-6">
+
       <h3 className="text-lg font-bold" style={{ color: colors.text }}>
         Maintenance Mode
       </h3>
-
-      {/* Info Alert */}
-      <div
-        className="p-4 rounded-lg border flex items-start gap-3"
-        style={{
-          backgroundColor: config.enabled
-            ? "rgba(239, 68, 68, 0.1)"
-            : "rgba(59, 130, 246, 0.1)",
-          borderColor: config.enabled
-            ? "rgba(239, 68, 68, 0.3)"
-            : "rgba(59, 130, 246, 0.3)",
-        }}
-      >
-        <AlertCircle
-          className="w-5 h-5 mt-0.5"
-          style={{ color: config.enabled ? "#EF4444" : colors.primary }}
-        />
-        <div>
-          <p className="font-semibold" style={{ color: colors.text }}>
-            {config.enabled
-              ? "Maintenance Mode is ACTIVE"
-              : "Maintenance Mode is INACTIVE"}
-          </p>
-          <p style={{ color: colors.textSecondary }} className="text-sm mt-1">
-            {config.enabled
-              ? "Users will see the maintenance message when trying to access the system."
-              : "System is running normally. Enable to notify users of maintenance."}
-          </p>
-        </div>
-      </div>
 
       {/* Toggle Switch */}
       <div
@@ -162,7 +137,7 @@ export function AdminMaintenanceMode({
             Enable Maintenance Mode
           </h4>
           <p style={{ color: colors.textSecondary }} className="text-sm mt-1">
-            When enabled, users will see a maintenance message
+            When enabled, users will see a maintenance notification
           </p>
         </div>
         <button
@@ -182,6 +157,70 @@ export function AdminMaintenanceMode({
           />
         </button>
       </div>
+
+      {/* Maintenance Mode Selection */}
+      {config.enabled && (
+        <div
+          className="p-4 rounded-lg border"
+          style={{
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          }}
+        >
+          <label
+            className="block font-semibold mb-4"
+            style={{ color: colors.text }}
+          >
+            Maintenance Mode Type
+          </label>
+          <div className="space-y-3">
+            <button
+              onClick={() => handleModeChange("warning")}
+              className="w-full p-3 rounded-lg border text-left transition-all"
+              style={{
+                backgroundColor:
+                  config.mode === "warning"
+                    ? `${colors.primary}20`
+                    : colors.sidebar,
+                borderColor:
+                  config.mode === "warning" ? colors.primary : colors.border,
+              }}
+            >
+              <p className="font-medium" style={{ color: colors.text }}>
+                ⚠️ Warning Modal
+              </p>
+              <p
+                className="text-xs mt-1"
+                style={{ color: colors.textSecondary }}
+              >
+                Shows a warning popup, users can dismiss it
+              </p>
+            </button>
+            <button
+              onClick={() => handleModeChange("global")}
+              className="w-full p-3 rounded-lg border text-left transition-all"
+              style={{
+                backgroundColor:
+                  config.mode === "global"
+                    ? `${colors.primary}20`
+                    : colors.sidebar,
+                borderColor:
+                  config.mode === "global" ? colors.primary : colors.border,
+              }}
+            >
+              <p className="font-medium" style={{ color: colors.text }}>
+                🌐 Global Maintenance
+              </p>
+              <p
+                className="text-xs mt-1"
+                style={{ color: colors.textSecondary }}
+              >
+                Blocks entire site, users see only maintenance screen
+              </p>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Message Editor */}
       <div
@@ -215,31 +254,6 @@ export function AdminMaintenanceMode({
         </p>
       </div>
 
-      {/* Save Button */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
-          style={{
-            backgroundColor: colors.accent,
-            color: "#FFFFFF",
-          }}
-        >
-          <Save className="w-4 h-4" />
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
-        {message && (
-          <p
-            className="text-sm"
-            style={{
-              color: message.includes("successfully") ? "#22C55E" : "#EF4444",
-            }}
-          >
-            {message}
-          </p>
-        )}
-      </div>
 
       {/* Admin Bypass Info */}
       {config.enabled && (
