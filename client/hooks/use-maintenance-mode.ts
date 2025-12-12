@@ -6,7 +6,7 @@ import { MaintenanceConfig } from "@shared/api";
 const DEFAULT_CONFIG: MaintenanceConfig = {
   enabled: false,
   message: "The system is currently under maintenance. Please try again later.",
-  mode: "fullscreen",
+  mode: "global",
   lastUpdated: new Date().toISOString(),
 };
 
@@ -24,7 +24,7 @@ export function useMaintenanceMode() {
           setMaintenanceConfig({
             ...DEFAULT_CONFIG,
             ...data,
-            mode: (data.mode || "fullscreen") as any,
+            mode: (data.mode || "global") as any,
           });
         } else {
           setMaintenanceConfig(DEFAULT_CONFIG);

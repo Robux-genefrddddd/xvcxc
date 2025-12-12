@@ -40,7 +40,7 @@ export function ConfirmDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
       style={{
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         backdropFilter: "blur(4px)",
@@ -49,7 +49,7 @@ export function ConfirmDialog({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-2xl border shadow-2xl"
+        className="w-full max-w-sm rounded-xl border shadow-2xl animate-in zoom-in-95 slide-in-from-top-12 duration-300"
         style={{
           backgroundColor: colors.card,
           borderColor: colors.border,

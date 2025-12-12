@@ -48,11 +48,20 @@ export function DashboardSidebar({
   userRole,
 }: DashboardSidebarProps) {
   const colors = getThemeColors(theme);
-  const storageLimitMB = userPlan ? userPlan.storageLimit / (1024 * 1024) : 100;
   const storageUsedMB = userPlan ? userPlan.storageUsed / (1024 * 1024) : 0;
   const storagePercentage = userPlan
     ? (userPlan.storageUsed / userPlan.storageLimit) * 100
     : 0;
+
+  const getStorageLimitDisplay = () => {
+    if (!userPlan) return "100 MB";
+    const limitTB = userPlan.storageLimit / (1024 * 1024 * 1024 * 1024);
+    if (limitTB >= 999) return "Unlimited";
+    if (limitTB >= 1) return `${limitTB.toFixed(0)} T`;
+    const limitGB = userPlan.storageLimit / (1024 * 1024 * 1024);
+    if (limitGB >= 1) return `${limitGB.toFixed(0)} GB`;
+    return `${(limitGB * 1024).toFixed(0)} MB`;
+  };
 
   const handleLogout = async () => {
     try {
@@ -102,7 +111,7 @@ export function DashboardSidebar({
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors text-left border-l-2.5"
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors text-left border-l-2.5 rounded-lg"
               style={{
                 backgroundColor: isActive
                   ? `${colors.primary}15`
@@ -186,7 +195,7 @@ export function DashboardSidebar({
             </div>
             <div className="flex items-center justify-between">
               <p className="text-xs" style={{ color: colors.textSecondary }}>
-                {storageLimitMB.toFixed(0)} MB limit
+                {getStorageLimitDisplay()} limit
               </p>
               <p
                 className="text-xs font-medium px-2 py-0.5 rounded"
@@ -208,7 +217,7 @@ export function DashboardSidebar({
         {userPlan && userPlan.type === "free" && onUpgradeClick && (
           <button
             onClick={onUpgradeClick}
-            className="w-full px-3 py-2 text-xs font-semibold transition-colors border"
+            className="w-full px-3 py-2 text-xs font-semibold transition-colors border rounded-lg"
             style={{
               backgroundColor: colors.accentLight,
               color: colors.primary,
@@ -221,7 +230,7 @@ export function DashboardSidebar({
 
         <button
           onClick={handleLogout}
-          className="w-full px-3 py-2 text-xs transition-colors border flex items-center justify-center gap-2"
+          className="w-full px-3 py-2 text-xs transition-colors border rounded-lg flex items-center justify-center gap-2"
           style={{
             backgroundColor: "transparent",
             borderColor: colors.border,
