@@ -56,7 +56,7 @@ export function UserManagement({
     <div className="space-y-6">
       {/* Add User Form */}
       <div
-        className="rounded-lg border p-6"
+        className="rounded-2xl border p-6"
         style={{
           backgroundColor: colors.card,
           borderColor: colors.border,
@@ -71,7 +71,7 @@ export function UserManagement({
             placeholder="Full Name"
             value={newUserName}
             onChange={(e) => setNewUserName(e.target.value)}
-            className="px-4 py-2 rounded-lg border text-sm focus:outline-none"
+            className="px-4 py-2 rounded-xl border text-sm focus:outline-none"
             style={inputStyle}
             onFocus={(e) => {
               e.currentTarget.style.borderColor = colors.primary;
@@ -85,7 +85,7 @@ export function UserManagement({
             placeholder="Email Address"
             value={newUserEmail}
             onChange={(e) => setNewUserEmail(e.target.value)}
-            className="px-4 py-2 rounded-lg border text-sm focus:outline-none"
+            className="px-4 py-2 rounded-xl border text-sm focus:outline-none"
             style={inputStyle}
             onFocus={(e) => {
               e.currentTarget.style.borderColor = colors.primary;
@@ -97,7 +97,7 @@ export function UserManagement({
           <select
             value={newUserRole}
             onChange={(e) => setNewUserRole(e.target.value as "admin" | "user")}
-            className="px-4 py-2 rounded-lg border text-sm focus:outline-none"
+            className="px-4 py-2 rounded-xl border text-sm focus:outline-none"
             style={selectStyle}
           >
             <option value="user">User</option>
@@ -105,7 +105,7 @@ export function UserManagement({
           </select>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-opacity hover:opacity-80"
+            className="px-4 py-2 rounded-xl font-medium flex items-center justify-center gap-2 transition-opacity hover:opacity-80"
             style={{
               backgroundColor: colors.accentLight,
               color: colors.primary,
@@ -119,7 +119,7 @@ export function UserManagement({
 
       {/* Users List */}
       <div
-        className="rounded-lg border overflow-hidden"
+        className="rounded-2xl border overflow-hidden"
         style={{
           backgroundColor: colors.card,
           borderColor: colors.border,
