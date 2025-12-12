@@ -1,8 +1,7 @@
 import { X, Lock, Link2, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { getThemeColors } from "@/lib/theme-colors";
-import { motion, AnimatePresence } from "framer-motion";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 interface ShareFileModalProps {
