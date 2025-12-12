@@ -32,7 +32,9 @@ export function ConfirmDialog({
 
   const Icon = isDangerous ? Trash2 : CheckCircle;
   const iconColor = isDangerous ? "#EF4444" : colors.primary;
-  const iconBgColor = isDangerous ? "rgba(239, 68, 68, 0.1)" : `${colors.primary}15`;
+  const iconBgColor = isDangerous
+    ? "rgba(239, 68, 68, 0.1)"
+    : `${colors.primary}15`;
   const confirmBgColor = isDangerous ? "#EF4444" : colors.accentLight;
   const confirmTextColor = isDangerous ? "white" : colors.primary;
 
@@ -70,10 +72,7 @@ export function ConfirmDialog({
               <Icon className="w-6 h-6" style={{ color: iconColor }} />
             </div>
             <div className="flex-1">
-              <h2
-                className="text-lg font-bold"
-                style={{ color: colors.text }}
-              >
+              <h2 className="text-lg font-bold" style={{ color: colors.text }}>
                 {title}
               </h2>
             </div>

@@ -224,9 +224,7 @@ export function SharedFilesList({
                   {/* Actions */}
                   <div className="flex items-center gap-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
-                      onClick={() =>
-                        handleCopyShare(file.id, file.shareUrl)
-                      }
+                      onClick={() => handleCopyShare(file.id, file.shareUrl)}
                       className="p-1.5 rounded-lg transition-colors"
                       style={{
                         backgroundColor:
