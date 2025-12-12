@@ -115,17 +115,18 @@ export function DashboardSidebar({
         })}
       </nav>
 
-      {/* User Info - Minimaliste */}
+      {/* User Info Section */}
       <div
-        className="mt-6 pt-4 border-t space-y-3"
+        className="pt-6 border-t space-y-4"
         style={{ borderColor: colors.border }}
       >
-        <div className="flex items-start gap-2">
+        {/* User Card */}
+        <div className="flex items-start gap-3">
           <div
-            className="w-8 h-8 rounded text-xs flex items-center justify-center font-bold flex-shrink-0"
+            className="w-10 h-10 rounded-lg text-sm flex items-center justify-center font-bold flex-shrink-0"
             style={{
-              backgroundColor: colors.accentLight,
-              color: colors.accent,
+              backgroundColor: colors.primary,
+              color: colors.sidebar,
             }}
           >
             {userName.charAt(0).toUpperCase()}
@@ -138,7 +139,7 @@ export function DashboardSidebar({
               {userName}
             </p>
             <p
-              className="text-xs truncate"
+              className="text-xs truncate mt-0.5"
               style={{ color: colors.textSecondary }}
             >
               {userEmail}
@@ -146,31 +147,31 @@ export function DashboardSidebar({
           </div>
         </div>
 
-        {/* Storage & Plan */}
+        {/* Storage Info */}
         {userPlan && (
-          <div className="space-y-2">
+          <div className="space-y-2 bg-black bg-opacity-20 rounded-lg p-3">
             <div className="flex items-center justify-between">
               <p
-                className="text-xs uppercase tracking-widest"
+                className="text-xs uppercase font-medium tracking-wide"
                 style={{ color: colors.textSecondary }}
               >
                 Storage
               </p>
               <p
                 className="text-xs font-semibold"
-                style={{ color: colors.text }}
+                style={{ color: colors.sidebarForeground }}
               >
-                {storageUsedMB.toFixed(0)}MB
+                {storageUsedMB.toFixed(0)} MB
               </p>
             </div>
             <div
-              className="w-full h-1 rounded-full overflow-hidden"
+              className="w-full h-1.5 rounded-full overflow-hidden"
               style={{
                 backgroundColor: colors.border,
               }}
             >
               <div
-                className="h-full transition-all duration-300"
+                className="h-1.5 transition-all duration-500"
                 style={{
                   width: `${Math.min(storagePercentage, 100)}%`,
                   backgroundColor:
@@ -182,9 +183,23 @@ export function DashboardSidebar({
                 }}
               />
             </div>
-            <p className="text-xs" style={{ color: colors.textSecondary }}>
-              {userPlan.type === "premium" ? "Premium" : "Free"}
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs" style={{ color: colors.textSecondary }}>
+                {storageLimitMB.toFixed(0)} MB limit
+              </p>
+              <p
+                className="text-xs font-medium px-2 py-0.5 rounded"
+                style={{
+                  backgroundColor:
+                    userPlan.type === "premium"
+                      ? "rgba(34, 197, 94, 0.15)"
+                      : "rgba(100, 116, 139, 0.15)",
+                  color: userPlan.type === "premium" ? "#22C55E" : colors.primary,
+                }}
+              >
+                {userPlan.type === "premium" ? "Premium" : "Free"}
+              </p>
+            </div>
           </div>
         )}
 
