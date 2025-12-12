@@ -31,7 +31,7 @@ export interface PremiumKeyData {
 /**
  * Maintenance mode configuration
  */
-export type MaintenanceMode = "modal" | "fullscreen" | "banner";
+export type MaintenanceMode = "warning" | "global";
 
 export interface MaintenanceConfig {
   enabled: boolean;
