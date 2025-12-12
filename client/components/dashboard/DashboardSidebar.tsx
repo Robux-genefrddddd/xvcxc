@@ -102,7 +102,7 @@ export function DashboardSidebar({
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors text-left border-l-2.5"
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors text-left border-l-2.5 rounded-lg"
               style={{
                 backgroundColor: isActive
                   ? `${colors.primary}15`
@@ -208,7 +208,7 @@ export function DashboardSidebar({
         {userPlan && userPlan.type === "free" && onUpgradeClick && (
           <button
             onClick={onUpgradeClick}
-            className="w-full px-3 py-2 text-xs font-semibold transition-colors border"
+            className="w-full px-3 py-2 text-xs font-semibold transition-colors border rounded-lg"
             style={{
               backgroundColor: colors.accentLight,
               color: colors.primary,
@@ -221,7 +221,7 @@ export function DashboardSidebar({
 
         <button
           onClick={handleLogout}
-          className="w-full px-3 py-2 text-xs transition-colors border flex items-center justify-center gap-2"
+          className="w-full px-3 py-2 text-xs transition-colors border rounded-lg flex items-center justify-center gap-2"
           style={{
             backgroundColor: "transparent",
             borderColor: colors.border,
