@@ -233,7 +233,7 @@ export function FilesList({
         ) : files.length === 0 ? (
           <div className="px-6 py-16 text-center">
             <div
-              className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4"
+              className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
               style={{
                 backgroundColor: colors.border,
               }}
