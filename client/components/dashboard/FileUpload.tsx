@@ -69,7 +69,7 @@ export function FileUpload({
 
       <div className="flex flex-col items-center gap-5">
         <div
-          className="w-12 h-12 rounded-lg flex items-center justify-center"
+          className="w-12 h-12 rounded-xl flex items-center justify-center"
           style={{
             backgroundColor: dragActive ? colors.primary : colors.sidebar,
           }}
