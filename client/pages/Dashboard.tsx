@@ -519,6 +519,21 @@ export default function Dashboard() {
               </div>
             )}
 
+            {/* Shared Tab */}
+            {activeTab === "shared" && (
+              <div className="space-y-6">
+                <SharedFilesList
+                  files={files}
+                  loading={loading}
+                  theme={theme}
+                  onUnshare={handleUnshareFile}
+                  onCopyShareLink={(url) => {
+                    alert("Share link copied to clipboard!");
+                  }}
+                />
+              </div>
+            )}
+
             {/* Users Tab */}
             {activeTab === "users" && (
               <UserManagement
