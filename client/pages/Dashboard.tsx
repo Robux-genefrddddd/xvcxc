@@ -298,6 +298,21 @@ export default function Dashboard() {
     }
   };
 
+  const handleUnshareFile = async (fileId: string) => {
+    if (!confirm("Remove sharing for this file?")) return;
+
+    try {
+      await updateDoc(doc(db, "files", fileId), {
+        shared: false,
+        shareUrl: null,
+      });
+      loadFiles();
+    } catch (error) {
+      console.error("Error unsharing file:", error);
+      alert("Failed to remove sharing. Please try again.");
+    }
+  };
+
   const handleDeleteFile = async (fileId: string) => {
     const file = files.find((f) => f.id === fileId);
     if (!confirm("Delete this file? This action cannot be undone.")) return;
