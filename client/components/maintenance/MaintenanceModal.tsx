@@ -47,10 +47,7 @@ export function MaintenanceModal({
               backgroundColor: "rgba(239, 68, 68, 0.15)",
             }}
           >
-            <AlertCircle
-              className="w-8 h-8"
-              style={{ color: "#EF4444" }}
-            />
+            <AlertCircle className="w-8 h-8" style={{ color: "#EF4444" }} />
           </div>
         </div>
 

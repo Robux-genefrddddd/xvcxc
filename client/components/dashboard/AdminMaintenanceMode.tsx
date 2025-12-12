@@ -119,7 +119,6 @@ export function AdminMaintenanceMode({
 
   return (
     <div className="space-y-6">
-
       <h3 className="text-lg font-bold" style={{ color: colors.text }}>
         Maintenance Mode
       </h3>
@@ -173,7 +172,8 @@ export function AdminMaintenanceMode({
             Global Maintenance
           </h4>
           <p style={{ color: colors.textSecondary }} className="text-sm mt-1">
-            Full page blackout - entire site becomes inaccessible with maintenance screen
+            Full page blackout - entire site becomes inaccessible with
+            maintenance screen
           </p>
         </div>
         <button
@@ -209,7 +209,8 @@ export function AdminMaintenanceMode({
             Enable Maintenance Mode
           </h4>
           <p style={{ color: colors.textSecondary }} className="text-sm mt-1">
-            Activates {config.mode === "warning" ? "warning modal" : "global maintenance"}
+            Activates{" "}
+            {config.mode === "warning" ? "warning modal" : "global maintenance"}
           </p>
         </div>
         <button
@@ -261,7 +262,6 @@ export function AdminMaintenanceMode({
           enabled.
         </p>
       </div>
-
 
       {/* Admin Bypass Info */}
       {config.enabled && (
