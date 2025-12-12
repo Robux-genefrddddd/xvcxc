@@ -158,68 +158,90 @@ export function AdminMaintenanceMode({
         </button>
       </div>
 
-      {/* Maintenance Mode Selection */}
+      {/* Warning Modal Toggle */}
       {config.enabled && (
-        <div
-          className="p-4 rounded-lg border"
-          style={{
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-          }}
-        >
-          <label
-            className="block font-semibold mb-4"
-            style={{ color: colors.text }}
+        <>
+          <div
+            className="flex items-center justify-between p-4 rounded-lg border"
+            style={{
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+            }}
           >
-            Maintenance Mode Type
-          </label>
-          <div className="space-y-3">
-            <button
-              onClick={() => handleModeChange("warning")}
-              className="w-full p-3 rounded-lg border text-left transition-all"
-              style={{
-                backgroundColor:
-                  config.mode === "warning"
-                    ? `${colors.primary}20`
-                    : colors.sidebar,
-                borderColor:
-                  config.mode === "warning" ? colors.primary : colors.border,
-              }}
-            >
-              <p className="font-medium" style={{ color: colors.text }}>
+            <div>
+              <h4 className="font-semibold" style={{ color: colors.text }}>
                 ⚠️ Warning Modal
-              </p>
+              </h4>
               <p
-                className="text-xs mt-1"
                 style={{ color: colors.textSecondary }}
+                className="text-sm mt-1"
               >
-                Shows a warning popup, users can dismiss it
+                Shows a popup, users can dismiss it
               </p>
-            </button>
+            </div>
             <button
-              onClick={() => handleModeChange("global")}
-              className="w-full p-3 rounded-lg border text-left transition-all"
+              onClick={() =>
+                handleModeChange(config.mode === "warning" ? "global" : "warning")
+              }
+              className="relative inline-flex h-8 w-14 items-center rounded-full transition-colors"
               style={{
                 backgroundColor:
-                  config.mode === "global"
-                    ? `${colors.primary}20`
-                    : colors.sidebar,
-                borderColor:
-                  config.mode === "global" ? colors.primary : colors.border,
+                  config.mode === "warning" ? colors.accent : colors.sidebar,
               }}
             >
-              <p className="font-medium" style={{ color: colors.text }}>
+              <span
+                className="inline-block h-6 w-6 transform rounded-full bg-white transition-transform"
+                style={{
+                  transform:
+                    config.mode === "warning"
+                      ? "translateX(28px)"
+                      : "translateX(2px)",
+                }}
+              />
+            </button>
+          </div>
+
+          {/* Global Maintenance Toggle */}
+          <div
+            className="flex items-center justify-between p-4 rounded-lg border"
+            style={{
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+            }}
+          >
+            <div>
+              <h4 className="font-semibold" style={{ color: colors.text }}>
                 🌐 Global Maintenance
-              </p>
+              </h4>
               <p
-                className="text-xs mt-1"
                 style={{ color: colors.textSecondary }}
+                className="text-sm mt-1"
               >
                 Blocks entire site, users see only maintenance screen
               </p>
+            </div>
+            <button
+              onClick={() =>
+                handleModeChange(config.mode === "global" ? "warning" : "global")
+              }
+              className="relative inline-flex h-8 w-14 items-center rounded-full transition-colors"
+              style={{
+                backgroundColor:
+                  config.mode === "global" ? colors.accent : colors.sidebar,
+              }}
+            >
+              <span
+                className="inline-block h-6 w-6 transform rounded-full bg-white transition-transform"
+                style={{
+                  transform:
+                    config.mode === "global"
+                      ? "translateX(28px)"
+                      : "translateX(2px)",
+                }}
+              />
             </button>
           </div>
-        </div>
+        </>
       )}
 
       {/* Message Editor */}
