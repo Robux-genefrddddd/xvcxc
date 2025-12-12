@@ -48,11 +48,18 @@ export function DashboardSidebar({
   userRole,
 }: DashboardSidebarProps) {
   const colors = getThemeColors(theme);
-  const storageLimitMB = userPlan ? userPlan.storageLimit / (1024 * 1024) : 100;
   const storageUsedMB = userPlan ? userPlan.storageUsed / (1024 * 1024) : 0;
   const storagePercentage = userPlan
     ? (userPlan.storageUsed / userPlan.storageLimit) * 100
     : 0;
+
+  const getStorageLimitDisplay = () => {
+    if (!userPlan) return "100 MB";
+    const limitGB = userPlan.storageLimit / (1024 * 1024 * 1024);
+    if (limitGB >= 999) return "Unlimited";
+    if (limitGB >= 1) return `${limitGB.toFixed(0)} GB`;
+    return `${(limitGB * 1024).toFixed(0)} MB`;
+  };
 
   const handleLogout = async () => {
     try {
@@ -186,7 +193,7 @@ export function DashboardSidebar({
             </div>
             <div className="flex items-center justify-between">
               <p className="text-xs" style={{ color: colors.textSecondary }}>
-                {storageLimitMB.toFixed(0)} MB limit
+                {getStorageLimitDisplay()} limit
               </p>
               <p
                 className="text-xs font-medium px-2 py-0.5 rounded"
