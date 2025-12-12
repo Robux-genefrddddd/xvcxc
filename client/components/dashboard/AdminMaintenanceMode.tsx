@@ -134,7 +134,7 @@ export function AdminMaintenanceMode({
       >
         <div>
           <h4 className="font-semibold" style={{ color: colors.text }}>
-            ⚠️ Warning Modal
+            Warning Modal
           </h4>
           <p style={{ color: colors.textSecondary }} className="text-sm mt-1">
             Shows a popup, users can dismiss it
@@ -170,10 +170,10 @@ export function AdminMaintenanceMode({
       >
         <div>
           <h4 className="font-semibold" style={{ color: colors.text }}>
-            🌐 Global Maintenance
+            Global Maintenance
           </h4>
           <p style={{ color: colors.textSecondary }} className="text-sm mt-1">
-            Blocks entire site, users see only maintenance screen
+            Full page blackout - entire site becomes inaccessible with maintenance screen
           </p>
         </div>
         <button
