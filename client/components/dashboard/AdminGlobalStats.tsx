@@ -265,7 +265,7 @@ export function AdminGlobalStats({ theme, userRole }: AdminGlobalStatsProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Plan Distribution Pie Chart */}
             <div
-              className="p-4 rounded-lg border"
+              className="p-4 rounded-xl border"
               style={{
                 backgroundColor: colors.card,
                 borderColor: colors.border,
