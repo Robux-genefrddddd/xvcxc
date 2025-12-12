@@ -29,6 +29,9 @@ export function UserManagement({
   const [newUserName, setNewUserName] = useState("");
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserRole, setNewUserRole] = useState<"admin" | "user">("user");
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
+  const [deleteUserName, setDeleteUserName] = useState("");
 
   const handleSubmit = () => {
     if (!newUserName.trim() || !newUserEmail.trim()) {
