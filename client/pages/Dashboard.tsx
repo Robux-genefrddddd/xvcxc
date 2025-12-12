@@ -559,6 +559,25 @@ export default function Dashboard() {
         userId={userId || ""}
         onUpgradePlan={(plan) => setUserPlan(plan)}
       />
+
+      {/* Share File Modal */}
+      {shareFileId && (
+        <ShareFileModal
+          isOpen={shareModalOpen}
+          onClose={() => {
+            setShareModalOpen(false);
+            setShareFileId(null);
+            setShareFileName("");
+            loadFiles();
+          }}
+          fileId={shareFileId}
+          fileName={shareFileName}
+          theme={theme}
+          onShareComplete={() => {
+            loadFiles();
+          }}
+        />
+      )}
     </div>
   );
 }
