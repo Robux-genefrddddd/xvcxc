@@ -62,60 +62,76 @@ export function MaintenanceScreen() {
 
   const colors = getThemeColors("dark");
 
-  return (
-    <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 animate-fade-in"
-      style={{
-        backgroundColor: colors.background,
-        animation: "fadeIn 0.6s ease-out",
-      }}
-    >
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `}</style>
+  // Show Warning Modal if mode is "warning"
+  if (maintenanceMode === "warning") {
+    return (
+      <MaintenanceModal
+        message={maintenanceMessage}
+        onDismiss={() => setDismissedModal(true)}
+      />
+    );
+  }
 
-      <div className="text-center max-w-2xl">
-        <h1
-          className="text-5xl font-bold mb-6"
-          style={{
-            color: colors.text,
-            animation: "slideUp 0.8s ease-out 0.1s both",
-          }}
-        >
-          Maintenance
-        </h1>
+  // Show Global Maintenance (full screen) if mode is "global"
+  if (maintenanceMode === "global") {
+    return (
+      <div
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 animate-fade-in"
+        style={{
+          backgroundColor: colors.background,
+          animation: "fadeIn 0.6s ease-out",
+        }}
+      >
+        <style>{`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+        `}</style>
 
-        <p
-          className="text-xl"
-          style={{
-            color: colors.textSecondary,
-            animation: "slideUp 0.8s ease-out 0.2s both",
-            lineHeight: "1.8",
-          }}
-        >
-          {maintenanceMessage}
-        </p>
+        <div className="text-center max-w-2xl">
+          <h1
+            className="text-5xl font-bold mb-6"
+            style={{
+              color: colors.text,
+              animation: "slideUp 0.8s ease-out 0.1s both",
+            }}
+          >
+            Maintenance
+          </h1>
+
+          <p
+            className="text-xl"
+            style={{
+              color: colors.textSecondary,
+              animation: "slideUp 0.8s ease-out 0.2s both",
+              lineHeight: "1.8",
+            }}
+          >
+            {maintenanceMessage}
+          </p>
+        </div>
+
+        <style>{`
+          @keyframes slideUp {
+            from {
+              transform: translateY(20px);
+              opacity: 0;
+            }
+            to {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+        `}</style>
       </div>
+    );
+  }
 
-      <style>{`
-        @keyframes slideUp {
-          from {
-            transform: translateY(20px);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-      `}</style>
-    </div>
-  );
+  // Default: no maintenance screen
+  return null;
 }
