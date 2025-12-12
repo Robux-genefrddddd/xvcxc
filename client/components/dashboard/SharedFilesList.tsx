@@ -247,8 +247,9 @@ export function SharedFilesList({
 
                     <button
                       onClick={() => {
-                        setUnsharingId(file.id);
-                        onUnshare(file.id);
+                        setUnshareFileId(file.id);
+                        setUnshareFileName(file.name);
+                        setUnshareConfirmOpen(true);
                       }}
                       disabled={unsharingId === file.id}
                       className="p-1.5 rounded-lg transition-colors"
