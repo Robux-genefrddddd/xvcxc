@@ -219,6 +219,30 @@ export function UserManagement({
           )}
         </div>
       </div>
+
+      {/* Delete User Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => {
+          setDeleteConfirmOpen(false);
+          setDeleteUserId(null);
+          setDeleteUserName("");
+        }}
+        onConfirm={() => {
+          if (deleteUserId) {
+            onDeleteUser(deleteUserId);
+            setDeleteConfirmOpen(false);
+            setDeleteUserId(null);
+            setDeleteUserName("");
+          }
+        }}
+        title="Delete User?"
+        description={`Are you sure you want to delete "${deleteUserName}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous={true}
+        theme={theme}
+      />
     </div>
   );
 }
