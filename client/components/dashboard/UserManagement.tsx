@@ -200,8 +200,12 @@ export function UserManagement({
                     <option value="admin">Admin</option>
                   </select>
                   <button
-                    onClick={() => onDeleteUser(user.id)}
-                    className="p-2 rounded hover:opacity-60 transition-opacity"
+                    onClick={() => {
+                      setDeleteUserId(user.id);
+                      setDeleteUserName(user.name);
+                      setDeleteConfirmOpen(true);
+                    }}
+                    className="p-2 rounded-lg hover:opacity-60 transition-opacity"
                     title="Delete user"
                     style={{
                       color: "#EF4444",
