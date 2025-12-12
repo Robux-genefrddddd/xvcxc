@@ -77,7 +77,7 @@ export default function Dashboard() {
   const [shareFileName, setShareFileName] = useState("");
   const [userPlan, setUserPlan] = useState<UserPlan>({
     type: "free",
-    storageLimit: 100 * 1024 * 1024,
+    storageLimit: 1024 * 1024 * 1024, // 1 TB
     storageUsed: 0,
   });
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -108,7 +108,7 @@ export default function Dashboard() {
             // Initialize free plan for new users
             const initialPlan: UserPlan = {
               type: "free",
-              storageLimit: 100 * 1024 * 1024,
+              storageLimit: 1024 * 1024 * 1024, // 1 TB
               storageUsed: 0,
             };
             await setDoc(planRef, initialPlan);
