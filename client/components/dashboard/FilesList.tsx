@@ -418,6 +418,33 @@ export function FilesList({
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => {
+          setDeleteConfirmOpen(false);
+          setDeleteFileId(null);
+          setDeleteFileName("");
+        }}
+        onConfirm={async () => {
+          if (deleteFileId) {
+            setDeletingId(deleteFileId);
+            await onDelete(deleteFileId);
+            setDeleteConfirmOpen(false);
+            setDeleteFileId(null);
+            setDeleteFileName("");
+            setDeletingId(null);
+          }
+        }}
+        title="Delete File?"
+        description={`Are you sure you want to delete "${deleteFileName}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous={true}
+        theme={theme}
+        loading={deletingId === deleteFileId}
+      />
     </div>
   );
 }
