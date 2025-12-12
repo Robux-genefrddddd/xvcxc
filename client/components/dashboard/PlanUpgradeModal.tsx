@@ -90,13 +90,7 @@ export function PlanUpgradeModal({
 
       setSuccess(true);
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
-
-      setTimeout(() => {
-        onClose();
-        setKeyInput("");
-        setSuccess(false);
-      }, 2000);
+      setTimeout(() => setShowConfetti(false), 4000);
     } catch (err) {
       console.error("Error validating key:", err);
       setError("Error validating key. Please try again.");
