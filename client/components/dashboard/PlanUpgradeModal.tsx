@@ -28,6 +28,17 @@ export function PlanUpgradeModal({
   const [showConfetti, setShowConfetti] = useState(false);
   const colors = getThemeColors(theme);
 
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        onClose();
+        setKeyInput("");
+        setSuccess(false);
+      }, 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [success, onClose]);
+
   const handleValidateKey = async () => {
     if (!keyInput.trim()) {
       setError("Please enter a premium key");
