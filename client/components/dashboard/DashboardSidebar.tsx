@@ -55,8 +55,10 @@ export function DashboardSidebar({
 
   const getStorageLimitDisplay = () => {
     if (!userPlan) return "100 MB";
+    const limitTB = userPlan.storageLimit / (1024 * 1024 * 1024 * 1024);
+    if (limitTB >= 999) return "Unlimited";
+    if (limitTB >= 1) return `${limitTB.toFixed(0)} T`;
     const limitGB = userPlan.storageLimit / (1024 * 1024 * 1024);
-    if (limitGB >= 999) return "Unlimited";
     if (limitGB >= 1) return `${limitGB.toFixed(0)} GB`;
     return `${(limitGB * 1024).toFixed(0)} MB`;
   };
