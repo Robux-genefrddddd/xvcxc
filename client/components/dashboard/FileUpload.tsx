@@ -47,7 +47,7 @@ export function FileUpload({
 
   return (
     <div
-      className="border rounded-lg p-12 text-center transition-all duration-200"
+      className="border rounded-2xl p-12 text-center transition-all duration-200"
       style={{
         backgroundColor: dragActive ? colors.accentLight : colors.card,
         borderColor: dragActive ? colors.primary : colors.border,
