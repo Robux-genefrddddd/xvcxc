@@ -61,8 +61,6 @@ export default function Index() {
     setError("");
 
     try {
-      const recaptchaToken = await executeRecaptcha("login");
-
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -75,8 +73,7 @@ export default function Index() {
         return;
       }
 
-      console.log("Login successful with reCAPTCHA token:", recaptchaToken);
-      navigate("/dashboard");
+      navigate("/recaptcha-verification", { state: { email } });
     } catch (err: unknown) {
       const error = err as { code?: string; message?: string };
       if (error.code === "auth/invalid-credential") {
