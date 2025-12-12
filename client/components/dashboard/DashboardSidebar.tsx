@@ -150,7 +150,7 @@ export function DashboardSidebar({
 
         {/* Storage Info */}
         {userPlan && (
-          <div className="space-y-2 bg-black bg-opacity-20 rounded-lg p-3">
+          <div className="space-y-2 bg-black bg-opacity-20 rounded-2xl p-3">
             <div className="flex items-center justify-between">
               <p
                 className="text-xs uppercase font-medium tracking-wide"
