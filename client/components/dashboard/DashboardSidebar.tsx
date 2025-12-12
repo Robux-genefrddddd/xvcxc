@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Files, Users, Palette, LogOut, Shield } from "lucide-react";
+import { Files, Users, Palette, LogOut, Shield, Share2 } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getThemeColors } from "@/lib/theme-colors";
@@ -25,6 +25,7 @@ interface DashboardSidebarProps {
 const getNavItems = (userRole?: UserRole) => {
   const items = [
     { id: "files", label: "Files", icon: Files },
+    { id: "shared", label: "Shared", icon: Share2 },
     { id: "users", label: "Manage Users", icon: Users },
     { id: "theme", label: "Theme", icon: Palette },
   ];
