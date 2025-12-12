@@ -76,7 +76,7 @@ export function DashboardSidebar({
       {/* Logo */}
       <Link
         to="/"
-        className="flex items-center gap-3 mb-10 hover:opacity-80 transition-opacity"
+        className="flex items-center gap-3 mb-12 hover:opacity-75 transition-opacity"
       >
         <img
           src="https://cdn.builder.io/api/v1/image/assets%2F91e2732f1c03487e879c66ee97e72712%2Fee08390eccc04e8dbea3ce5415d97e92?format=webp&width=800"
@@ -84,7 +84,7 @@ export function DashboardSidebar({
           className="w-8 h-8"
         />
         <span
-          className="text-lg font-bold"
+          className="text-base font-bold tracking-tight"
           style={{ color: colors.sidebarForeground }}
         >
           PinPinCloud
@@ -92,7 +92,7 @@ export function DashboardSidebar({
       </Link>
 
       {/* Navigation */}
-      <nav className="space-y-1 flex-1">
+      <nav className="space-y-0.5 flex-1 mb-8">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -101,11 +101,11 @@ export function DashboardSidebar({
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm transition-colors text-left border-l-2"
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors text-left border-l-2.5"
               style={{
-                backgroundColor: isActive ? colors.accentLight : "transparent",
+                backgroundColor: isActive ? `${colors.primary}15` : "transparent",
                 borderColor: isActive ? colors.primary : "transparent",
-                color: isActive ? colors.accent : colors.textSecondary,
+                color: isActive ? colors.sidebarForeground : colors.textSecondary,
               }}
             >
               <Icon className="w-4 h-4" />
