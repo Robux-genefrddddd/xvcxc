@@ -167,7 +167,7 @@ export function SharedFilesList({
               return (
                 <div
                   key={file.id}
-                  className="px-6 py-3 flex items-center justify-between group hover:bg-opacity-50 transition-colors"
+                  className="px-6 py-3 flex items-center justify-between group hover:bg-opacity-50 transition-all duration-200 hover:scale-[1.02] origin-left cursor-pointer"
                   style={{
                     backgroundColor: colors.card,
                   }}
@@ -225,7 +225,7 @@ export function SharedFilesList({
                   <div className="flex items-center gap-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleCopyShare(file.id, file.shareUrl)}
-                      className="p-1.5 rounded-lg transition-colors"
+                      className="p-1.5 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-sm active:scale-95"
                       style={{
                         backgroundColor:
                           copiedId === file.id
@@ -250,7 +250,7 @@ export function SharedFilesList({
                         setUnshareConfirmOpen(true);
                       }}
                       disabled={unsharingId === file.id}
-                      className="p-1.5 rounded-lg transition-colors"
+                      className="p-1.5 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-sm active:scale-95"
                       style={{
                         color: "#EF4444",
                       }}
